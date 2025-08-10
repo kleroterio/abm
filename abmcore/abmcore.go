@@ -2,6 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package abm provides the base types and interfaces for agent-based
-// modeling simulations of political systems.
-package abm
+// Package abmcore provides the base logic for GUI representations of
+// agent-based modeling simulations of political systems.
+package abmcore
