@@ -11,11 +11,11 @@ import (
 	"cogentcore.org/core/math32"
 )
 
-// idCounter is used to generate unique IDs for agents.
-var idCounter uint64
-
 // AgentBase is the base type for all agents.
 type AgentBase struct {
+
+	// Sim is the simulation that the agent belongs to.
+	Sim Sim
 
 	// ID is the unique identifier for the agent.
 	ID uint64
@@ -34,12 +34,13 @@ type AgentBase struct {
 	Beliefs []float32
 }
 
-func (ab *AgentBase) AsAgentBase() *AgentBase {
+func (ab *AgentBase) AsBase() *AgentBase {
 	return ab
 }
 
 // Init initializes the agent with default values.
-func (ab *AgentBase) Init() {
-	ab.ID = atomic.AddUint64(&idCounter, 1) - 1
+func (ab *AgentBase) Init(sim Sim) {
+	ab.Sim = sim
+	ab.ID = atomic.AddUint64(&sim.AsBase().idCounter, 1) - 1
 	ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
 }
