@@ -34,6 +34,10 @@ type AgentBase struct {
 	Beliefs []float32
 }
 
+func (ab *AgentBase) AsAgentBase() *AgentBase {
+	return ab
+}
+
 // Init initializes the agent with default values.
 func (ab *AgentBase) Init() {
 	ab.ID = atomic.AddUint64(&idCounter, 1) - 1
