@@ -7,6 +7,6 @@ package abm
 // Sim is the interface that all simulations implement.
 type Sim interface {
 
-	// AsBase returns the simulation as a [SimBase].
-	AsBase() *SimBase
+	// Base returns the simulation as a [SimBase].
+	Base() *SimBase
 }

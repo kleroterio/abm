@@ -7,8 +7,8 @@ package abm
 // Agent is the interface that all agents implement.
 type Agent interface {
 
-	// AsBase returns the agent as an [AgentBase].
-	AsBase() *AgentBase
+	// Base returns the agent as an [AgentBase].
+	Base() *AgentBase
 
 	// Init initializes the agent with default values in the given simulation.
 	Init(sim Sim)

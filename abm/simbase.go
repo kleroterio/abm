@@ -14,6 +14,6 @@ type SimBase struct {
 	idCounter uint64
 }
 
-func (sb *SimBase) AsBase() *SimBase {
+func (sb *SimBase) Base() *SimBase {
 	return sb
 }

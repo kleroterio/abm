@@ -34,13 +34,13 @@ type AgentBase struct {
 	Beliefs []float32
 }
 
-func (ab *AgentBase) AsBase() *AgentBase {
+func (ab *AgentBase) Base() *AgentBase {
 	return ab
 }
 
 // Init initializes the agent with default values.
 func (ab *AgentBase) Init(sim Sim) {
 	ab.Sim = sim
-	ab.ID = atomic.AddUint64(&sim.AsBase().idCounter, 1) - 1
+	ab.ID = atomic.AddUint64(&sim.Base().idCounter, 1) - 1
 	ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
 }
