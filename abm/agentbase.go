@@ -40,7 +40,14 @@ func (ab *AgentBase) Base() *AgentBase {
 
 // Init initializes the agent with default values.
 func (ab *AgentBase) Init(sim Sim) {
+	sb := sim.Base()
+
 	ab.Sim = sim
-	ab.ID = atomic.AddUint64(&sim.Base().idCounter, 1) - 1
+	ab.ID = atomic.AddUint64(&sb.idCounter, 1) - 1
+
 	ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
+	ab.Beliefs = make([]float32, sb.NumBeliefs)
+	for i := range ab.Beliefs {
+		ab.Beliefs[i] = rand.Float32()
+	}
 }
