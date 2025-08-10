@@ -4,15 +4,24 @@
 
 package abm
 
-import "cogentcore.org/core/math32"
+import (
+	"math/rand/v2"
+	"sync/atomic"
+
+	"cogentcore.org/core/math32"
+)
+
+// idCounter is used to generate unique IDs for agents.
+var idCounter uint64
 
 // AgentBase is the base type for all agents.
 type AgentBase struct {
 
 	// ID is the unique identifier for the agent.
-	ID uint
+	ID uint64
 
-	// Position is the current position of the agent in the simulation space.
+	// Position is the current normalized position of the agent in the simulation space
+	// (each axis is from 0 to 1).
 	Position math32.Vector2
 
 	// Connections holds the connections between this agent and others.
@@ -23,4 +32,10 @@ type AgentBase struct {
 
 	// Beliefs contains the agent's beliefs on each belief axis (0 to 1).
 	Beliefs []float32
+}
+
+// Init initializes the agent with default values.
+func (ab *AgentBase) Init() {
+	ab.ID = atomic.AddUint64(&idCounter, 1) - 1
+	ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
 }
