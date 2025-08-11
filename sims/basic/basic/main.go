@@ -14,6 +14,9 @@ import (
 func main() {
 	b := core.NewBody("Basic ABM Simulation")
 	sim := abm.NewSim[basic.Sim]()
-	abmcore.NewSim2D(b).SetSim(sim)
+	sw := abmcore.NewSim2D(b).SetSim(sim)
+	b.AddTopBar(func(bar *core.Frame) {
+		core.NewToolbar(bar).Maker(sw.MakeToolbar)
+	})
 	b.RunMainWindow()
 }

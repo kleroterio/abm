@@ -6,6 +6,8 @@ package abmcore
 
 import (
 	"cogentcore.org/core/core"
+	"cogentcore.org/core/events"
+	"cogentcore.org/core/icons"
 	"cogentcore.org/core/styles"
 	"cogentcore.org/core/tree"
 	"github.com/kleroterio/abm/abm"
@@ -28,5 +30,15 @@ func (sw *Sim2D) Init() {
 	tree.AddChild(sw, func(w *core.Tabs) {
 		fr, _ := w.NewTab("Spatial 2D")
 		NewSpatial2D(fr).SetSim(sw.Sim)
+	})
+}
+
+func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
+	tree.Add(p, func(w *core.Button) {
+		w.SetText("Reset").SetIcon(icons.Update)
+		w.OnClick(func(e events.Event) {
+			sw.Sim.Init()
+			sw.Update()
+		})
 	})
 }
