@@ -23,7 +23,7 @@ type Sim2D struct {
 
 func (sw *Sim2D) Init() {
 	sw.Splits.Init()
-	sw.SetSplits(0.2, 0.8)
+	sw.SetSplits(0.25, 0.75)
 	sw.Styler(func(s *styles.Style) {
 		s.Grow.Set(1, 1)
 	})
