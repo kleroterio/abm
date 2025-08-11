@@ -16,10 +16,14 @@ type Sim interface {
 
 // NewSim creates and initializes a new simulation of type S.
 // *S must implement the [Sim] interface.
-func NewSim[S any]() *S {
+//
+// It also sets [SimBase.Config] to a [NewConfig] of type C.
+// *C must implement the [Config] interface.
+func NewSim[S, C any]() *S {
 	simS := new(S)
 	sim := any(simS).(Sim)
 	sim.Base().This = sim
+	sim.Base().Config = any(NewConfig[C]()).(Config)
 	sim.Init()
 	return simS
 }
