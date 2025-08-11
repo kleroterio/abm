@@ -5,3 +5,5 @@
 // Package abm provides the base types and interfaces for agent-based
 // modeling simulations of political systems.
 package abm
+
+//go:generate core generate

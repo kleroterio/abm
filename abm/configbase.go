@@ -5,7 +5,7 @@
 package abm
 
 // ConfigBase is the base type for configuration parameter sets.
-type ConfigBase struct {
+type ConfigBase struct { //types:add
 
 	// Beliefs is the number of belief axes in the simulation.
 	Beliefs int `default:"2"`
