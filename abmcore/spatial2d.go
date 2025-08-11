@@ -5,18 +5,49 @@
 package abmcore
 
 import (
+	"cogentcore.org/lab/plot"
+	"cogentcore.org/lab/plot/plots"
 	"cogentcore.org/lab/plotcore"
+	"cogentcore.org/lab/tensor"
 	"github.com/kleroterio/abm/abm"
 )
 
 // Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].
 type Spatial2D struct {
-	plotcore.Editor
+	plotcore.Plot
 
 	// Sim is the simulation that this 2D representation is based on.
 	Sim abm.Sim
 }
 
 func (sp *Spatial2D) Init() {
-	sp.Editor.Init()
+	sp.Plot.Init()
+
+	sp.Plot.Updater(func() {
+		sp.SetPlot(sp.MakePlot()) // TODO: more optimized updating?
+	})
+}
+
+// MakePlot creates the plot for the simulation.
+func (sp *Spatial2D) MakePlot() *plot.Plot {
+	pl := plot.New()
+
+	agents := sp.Sim.Base().Agents
+
+	xs := tensor.NewFloat32(len(agents))
+	ys := tensor.NewFloat32(len(agents))
+
+	for i, a := range agents {
+		pos := a.Base().Position
+		xs.Set(pos.X, i)
+		ys.Set(pos.Y, i)
+	}
+
+	data := plot.Data{
+		plot.X: xs,
+		plot.Y: ys,
+	}
+	plots.NewScatter(pl, data)
+
+	return pl
 }
