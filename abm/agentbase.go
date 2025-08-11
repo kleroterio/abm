@@ -46,7 +46,7 @@ func (ab *AgentBase) Init(sim Sim) {
 	ab.ID = atomic.AddUint64(&sb.idCounter, 1) - 1
 
 	ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
-	ab.Beliefs = make([]float32, sb.NumBeliefs)
+	ab.Beliefs = make([]float32, sb.Config.Base().Beliefs)
 	for i := range ab.Beliefs {
 		ab.Beliefs[i] = rand.Float32()
 	}

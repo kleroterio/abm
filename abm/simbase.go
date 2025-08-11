@@ -11,15 +11,14 @@ type SimBase struct {
 	// type of the simulation.
 	This Sim
 
+	// Config has the configuration parameters for the simulation.
+	Config Config
+
 	// Agents are the agents in the simulation.
 	Agents []Agent
 
 	// idCounter is used to generate unique IDs for agents.
 	idCounter uint64
-
-	// NumBeliefs is the number of belief axes in the simulation.
-	// This defaults to 2.
-	NumBeliefs int
 }
 
 func (sb *SimBase) Base() *SimBase {
@@ -29,10 +28,6 @@ func (sb *SimBase) Base() *SimBase {
 // Init initializes the simulation by initializing all agents
 // and connecting them according to their positions and beliefs.
 func (sb *SimBase) Init() {
-	if sb.NumBeliefs <= 0 {
-		sb.NumBeliefs = 2
-	}
-
 	for _, a := range sb.Agents {
 		a.Init(sb.This)
 	}
