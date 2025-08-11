@@ -22,6 +22,6 @@ func (sw *Sim2D) Init() {
 	sw.Frame.Init()
 
 	tree.AddChild(sw, func(w *core.Tabs) {
-		w.NewTab("Spatial")
+		w.NewTab("Spatial 2D")
 	})
 }

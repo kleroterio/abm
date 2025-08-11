@@ -5,3 +5,5 @@
 // Package abmcore provides the base logic for GUI representations of
 // agent-based modeling simulations of political systems.
 package abmcore
+
+//go:generate core generate
