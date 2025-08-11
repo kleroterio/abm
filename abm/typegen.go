@@ -6,4 +6,4 @@ import (
 	"cogentcore.org/core/types"
 )
 
-var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abm.ConfigBase", IDName: "config-base", Doc: "ConfigBase is the base type for configuration parameter sets.", Directives: []types.Directive{{Tool: "types", Directive: "add"}}, Fields: []types.Field{{Name: "Beliefs", Doc: "Beliefs is the number of belief axes in the simulation."}}})
+var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abm.ConfigBase", IDName: "config-base", Doc: "ConfigBase is the base type for configuration parameter sets.", Directives: []types.Directive{{Tool: "types", Directive: "add"}}, Fields: []types.Field{{Name: "Beliefs", Doc: "Beliefs is the number of political belief axes in the simulation."}, {Name: "SpatialNeighbors", Doc: "SpatialNeighbors is the number of agents each agent will be connected to\nby virtue of their spatial proximity."}, {Name: "BeliefNeighbors", Doc: "BeliefNeighbors is the number of agents each agent will be connected to\nby virtue of their proximity in political beliefs."}}})
