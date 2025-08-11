@@ -6,6 +6,7 @@ package abmcore
 
 import (
 	"cogentcore.org/core/core"
+	"cogentcore.org/core/styles"
 	"cogentcore.org/core/tree"
 	"github.com/kleroterio/abm/abm"
 )
@@ -20,6 +21,9 @@ type Sim2D struct {
 
 func (sw *Sim2D) Init() {
 	sw.Frame.Init()
+	sw.Styler(func(s *styles.Style) {
+		s.Grow.Set(1, 1)
+	})
 
 	tree.AddChild(sw, func(w *core.Tabs) {
 		fr, _ := w.NewTab("Spatial 2D")

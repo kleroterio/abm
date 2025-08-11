@@ -5,6 +5,7 @@
 package abmcore
 
 import (
+	"cogentcore.org/core/styles"
 	"cogentcore.org/lab/plot"
 	"cogentcore.org/lab/plot/plots"
 	"cogentcore.org/lab/plotcore"
@@ -22,8 +23,11 @@ type Spatial2D struct {
 
 func (sp *Spatial2D) Init() {
 	sp.Plot.Init()
+	sp.Styler(func(s *styles.Style) {
+		s.Grow.Set(1, 1)
+	})
 
-	sp.Plot.Updater(func() {
+	sp.Updater(func() {
 		sp.SetPlot(sp.MakePlot()) // TODO: more optimized updating?
 	})
 }
