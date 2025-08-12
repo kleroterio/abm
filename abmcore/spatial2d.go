@@ -62,8 +62,8 @@ func (sp *Spatial2D) MakePlot() *plot.Plot {
 	plot.Styler(beliefY, sp.colorStyler)
 
 	data := plot.Data{
-		plot.X: spatialX,
-		plot.Y: spatialY,
+		plot.X: beliefX,
+		plot.Y: beliefY,
 	}
 	plots.NewScatter(pl, data)
 
@@ -75,15 +75,17 @@ func (sp *Spatial2D) colorStyler(s *plot.Style) {
 	agents := sp.Sim.Base().Agents
 	s.Point.ColorFunc = func(i int) image.Image {
 		beliefs := agents[i].Base().Beliefs
-		var c hct.HCT
-		switch len(beliefs) {
-		case 1:
-			c = hct.New(beliefs[0]*360, 100, 50)
-		case 2:
-			c = hct.New(beliefs[0]*360, beliefs[1]*100, 50)
-		default:
-			c = hct.New(beliefs[0]*360, beliefs[1]*100, beliefs[2]*100)
+
+		hue := 270 + beliefs[0]*120 // blue to red
+		chroma, tone := float32(100), float32(50)
+		if len(beliefs) >= 2 {
+			tone = 25 + beliefs[1]*50
 		}
+		if len(beliefs) >= 3 {
+			chroma = 100 * beliefs[2]
+		}
+
+		c := hct.New(hue, chroma, tone)
 		return colors.Uniform(c.AsRGBA())
 	}
 	s.Point.FillFunc = s.Point.ColorFunc
