@@ -10,6 +10,7 @@ import (
 	"cogentcore.org/core/colors"
 	"cogentcore.org/core/colors/cam/hct"
 	"cogentcore.org/core/core"
+	"cogentcore.org/core/icons"
 	"cogentcore.org/core/styles"
 	"cogentcore.org/core/tree"
 	"cogentcore.org/lab/plot"
@@ -17,6 +18,18 @@ import (
 	"cogentcore.org/lab/table"
 	"cogentcore.org/lab/tensor"
 	"github.com/kleroterio/abm/abm"
+)
+
+// Modes are different preset modes for a [Spatial2D] plot.
+type Modes int32 //enums:enum -trim-prefix Mode
+
+const (
+
+	// ModeSpatial shows agents based on their spatial positions.
+	ModeSpatial Modes = iota
+
+	// ModeBelief shows agents based on their political beliefs.
+	ModeBelief
 )
 
 // Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].
@@ -115,5 +128,10 @@ func (sp *Spatial2D) colorStyler(s *plot.Style) {
 }
 
 func (sp *Spatial2D) MakeToolbar(p *tree.Plan) {
+	tree.Add(p, func(w *core.Button) {
+		w.SetText("Spatial").SetIcon(icons.LocationOn)
+		w.SetTooltip("")
+	})
+
 	sp.plot.MakeToolbar(p)
 }
