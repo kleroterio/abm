@@ -83,7 +83,24 @@ func (sp *Spatial2D) MakeTable() {
 	plot.Styler(sp.table.Column("Belief Y"), sp.colorStyler)
 
 	plot.Styler(sp.table.Column("Spatial X"), func(s *plot.Style) {
-		s.Role = plot.X
+		if sp.Mode == ModeSpatial {
+			s.Role = plot.X
+		} else {
+			s.Role = plot.Y
+		}
+	})
+	plot.Styler(sp.table.Column("Spatial Y"), func(s *plot.Style) {
+		s.On = sp.Mode == ModeSpatial
+	})
+	plot.Styler(sp.table.Column("Belief X"), func(s *plot.Style) {
+		if sp.Mode == ModeBelief {
+			s.Role = plot.X
+		} else {
+			s.Role = plot.Y
+		}
+	})
+	plot.Styler(sp.table.Column("Belief Y"), func(s *plot.Style) {
+		s.On = sp.Mode == ModeBelief
 	})
 
 	sp.plot.SetTable(sp.table)
