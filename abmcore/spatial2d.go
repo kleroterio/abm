@@ -9,7 +9,9 @@ import (
 
 	"cogentcore.org/core/colors"
 	"cogentcore.org/core/colors/cam/hct"
+	"cogentcore.org/core/core"
 	"cogentcore.org/core/styles"
+	"cogentcore.org/core/tree"
 	"cogentcore.org/lab/plot"
 	"cogentcore.org/lab/plotcore"
 	"cogentcore.org/lab/table"
@@ -19,61 +21,72 @@ import (
 
 // Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].
 type Spatial2D struct {
-	plotcore.Editor
+	core.Frame
 
 	// Sim is the simulation that this 2D representation is based on.
 	Sim abm.Sim
 
-	// Table is the data table for plotting.
-	Table *table.Table `set:"-"`
+	// table is the data table for plotting.
+	table *table.Table
+
+	// plot is the plot editor widget.
+	plot *plotcore.Editor
 }
 
 func (sp *Spatial2D) Init() {
-	sp.Editor.Init()
+	sp.Frame.Init()
 	sp.Styler(func(s *styles.Style) {
 		s.Grow.Set(1, 1)
+		s.Direction = styles.Column
 	})
 
-	sp.Updater(func() {
-		if sp.Table == nil {
-			sp.MakeTable()
-		}
-		sp.UpdateTable()
+	tree.AddChild(sp, func(w *core.Toolbar) {
+		w.Maker(sp.MakeToolbar)
+	})
+	tree.AddChild(sp, func(w *plotcore.Editor) {
+		sp.plot = w
+
+		w.Updater(func() {
+			if sp.table == nil {
+				sp.MakeTable()
+			}
+			sp.UpdateTable()
+		})
 	})
 }
 
 // MakeTable creates the data table for plotting.
 func (sp *Spatial2D) MakeTable() {
-	sp.Table = table.New()
+	sp.table = table.New()
 	n := len(sp.Sim.Base().Agents)
-	sp.Table.AddColumn("Spatial X", tensor.NewFloat32(n))
-	sp.Table.AddColumn("Spatial Y", tensor.NewFloat32(n))
-	sp.Table.AddColumn("Belief X", tensor.NewFloat32(n))
-	sp.Table.AddColumn("Belief Y", tensor.NewFloat32(n))
+	sp.table.AddColumn("Spatial X", tensor.NewFloat32(n))
+	sp.table.AddColumn("Spatial Y", tensor.NewFloat32(n))
+	sp.table.AddColumn("Belief X", tensor.NewFloat32(n))
+	sp.table.AddColumn("Belief Y", tensor.NewFloat32(n))
 
-	plot.Styler(sp.Table.Column("Spatial Y"), sp.colorStyler)
-	plot.Styler(sp.Table.Column("Belief Y"), sp.colorStyler)
+	plot.Styler(sp.table.Column("Spatial Y"), sp.colorStyler)
+	plot.Styler(sp.table.Column("Belief Y"), sp.colorStyler)
 
-	plot.Styler(sp.Table.Column("Spatial X"), func(s *plot.Style) {
+	plot.Styler(sp.table.Column("Spatial X"), func(s *plot.Style) {
 		s.Role = plot.X
 	})
 
-	sp.Editor.SetTable(sp.Table)
+	sp.plot.SetTable(sp.table)
 }
 
 // UpdateTable updates the data table with the current agent data.
 func (sp *Spatial2D) UpdateTable() {
 	agents := sp.Sim.Base().Agents
-	sp.Table.SetNumRows(len(agents))
+	sp.table.SetNumRows(len(agents))
 
 	for i, a := range agents {
 		pos := a.Base().Position
-		sp.Table.Column("Spatial X").SetFloat(float64(pos.X), i)
-		sp.Table.Column("Spatial Y").SetFloat(float64(pos.Y), i)
+		sp.table.Column("Spatial X").SetFloat(float64(pos.X), i)
+		sp.table.Column("Spatial Y").SetFloat(float64(pos.Y), i)
 
 		beliefs := a.Base().Beliefs
-		sp.Table.Column("Belief X").SetFloat(float64(beliefs[0]), i)
-		sp.Table.Column("Belief Y").SetFloat(float64(beliefs[1]), i)
+		sp.table.Column("Belief X").SetFloat(float64(beliefs[0]), i)
+		sp.table.Column("Belief Y").SetFloat(float64(beliefs[1]), i)
 	}
 }
 
@@ -99,4 +112,8 @@ func (sp *Spatial2D) colorStyler(s *plot.Style) {
 		return colors.Uniform(c.AsRGBA())
 	}
 	s.Point.FillFunc = s.Point.ColorFunc
+}
+
+func (sp *Spatial2D) MakeToolbar(p *tree.Plan) {
+	sp.plot.MakeToolbar(p)
 }
