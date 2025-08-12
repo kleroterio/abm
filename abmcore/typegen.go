@@ -8,6 +8,20 @@ import (
 	"github.com/kleroterio/abm/abm"
 )
 
+var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Plot", IDName: "plot", Doc: "Plot is a customizable 2D plot of a simulation.", Embeds: []types.Field{{Name: "Frame"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "Mode", Doc: "Mode is the current preset plotting mode."}, {Name: "table", Doc: "table is the data table for plotting."}, {Name: "plot", Doc: "plot is the plot editor widget."}}})
+
+// NewPlot returns a new [Plot] with the given optional parent:
+// Plot is a customizable 2D plot of a simulation.
+func NewPlot(parent ...tree.Node) *Plot { return tree.New[Plot](parent...) }
+
+// SetSim sets the [Plot.Sim]:
+// Sim is the simulation that this 2D representation is based on.
+func (t *Plot) SetSim(v abm.Sim) *Plot { t.Sim = v; return t }
+
+// SetMode sets the [Plot.Mode]:
+// Mode is the current preset plotting mode.
+func (t *Plot) SetMode(v Modes) *Plot { t.Mode = v; return t }
+
 var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Sim2D", IDName: "sim2-d", Doc: "Sim2D implements a plot-based 2D representation of an agent-based model simulation.", Embeds: []types.Field{{Name: "Splits"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}}})
 
 // NewSim2D returns a new [Sim2D] with the given optional parent:
@@ -17,17 +31,3 @@ func NewSim2D(parent ...tree.Node) *Sim2D { return tree.New[Sim2D](parent...) }
 // SetSim sets the [Sim2D.Sim]:
 // Sim is the simulation that this 2D representation is based on.
 func (t *Sim2D) SetSim(v abm.Sim) *Sim2D { t.Sim = v; return t }
-
-var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Spatial2D", IDName: "spatial2-d", Doc: "Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].", Embeds: []types.Field{{Name: "Frame"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "Mode", Doc: "Mode is the current preset plotting mode."}, {Name: "table", Doc: "table is the data table for plotting."}, {Name: "plot", Doc: "plot is the plot editor widget."}}})
-
-// NewSpatial2D returns a new [Plot] with the given optional parent:
-// Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].
-func NewSpatial2D(parent ...tree.Node) *Plot { return tree.New[Plot](parent...) }
-
-// SetSim sets the [Spatial2D.Sim]:
-// Sim is the simulation that this 2D representation is based on.
-func (pl *Plot) SetSim(v abm.Sim) *Plot { pl.Sim = v; return pl }
-
-// SetMode sets the [Spatial2D.Mode]:
-// Mode is the current preset plotting mode.
-func (pl *Plot) SetMode(v Modes) *Plot { pl.Mode = v; return pl }
