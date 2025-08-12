@@ -58,22 +58,8 @@ func (sp *Spatial2D) MakePlot() *plot.Plot {
 		beliefY.Set(beliefs[1], i)
 	}
 
-	plot.Styler(spatialY, func(s *plot.Style) {
-		s.Point.ColorFunc = func(i int) image.Image {
-			beliefs := agents[i].Base().Beliefs
-			var c hct.HCT
-			switch len(beliefs) {
-			case 1:
-				c = hct.New(beliefs[0]*360, 100, 50)
-			case 2:
-				c = hct.New(beliefs[0]*360, beliefs[1]*100, 50)
-			default:
-				c = hct.New(beliefs[0]*360, beliefs[1]*100, beliefs[2]*100)
-			}
-			return colors.Uniform(c.AsRGBA())
-		}
-		s.Point.FillFunc = s.Point.ColorFunc
-	})
+	plot.Styler(spatialY, sp.colorStyler)
+	plot.Styler(beliefY, sp.colorStyler)
 
 	data := plot.Data{
 		plot.X: spatialX,
@@ -82,4 +68,23 @@ func (sp *Spatial2D) MakePlot() *plot.Plot {
 	plots.NewScatter(pl, data)
 
 	return pl
+}
+
+// colorStyler is a plot styler that styles points based on agent beliefs.
+func (sp *Spatial2D) colorStyler(s *plot.Style) {
+	agents := sp.Sim.Base().Agents
+	s.Point.ColorFunc = func(i int) image.Image {
+		beliefs := agents[i].Base().Beliefs
+		var c hct.HCT
+		switch len(beliefs) {
+		case 1:
+			c = hct.New(beliefs[0]*360, 100, 50)
+		case 2:
+			c = hct.New(beliefs[0]*360, beliefs[1]*100, 50)
+		default:
+			c = hct.New(beliefs[0]*360, beliefs[1]*100, beliefs[2]*100)
+		}
+		return colors.Uniform(c.AsRGBA())
+	}
+	s.Point.FillFunc = s.Point.ColorFunc
 }
