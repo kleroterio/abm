@@ -5,6 +5,10 @@
 package abmcore
 
 import (
+	"image"
+
+	"cogentcore.org/core/colors"
+	"cogentcore.org/core/colors/cam/hct"
 	"cogentcore.org/core/styles"
 	"cogentcore.org/lab/plot"
 	"cogentcore.org/lab/plot/plots"
@@ -46,6 +50,23 @@ func (sp *Spatial2D) MakePlot() *plot.Plot {
 		xs.Set(pos.X, i)
 		ys.Set(pos.Y, i)
 	}
+
+	plot.Styler(ys, func(s *plot.Style) {
+		s.Point.ColorFunc = func(i int) image.Image {
+			beliefs := agents[i].Base().Beliefs
+			var c hct.HCT
+			switch len(beliefs) {
+			case 1:
+				c = hct.New(beliefs[0]*360, 100, 50)
+			case 2:
+				c = hct.New(beliefs[0]*360, beliefs[1]*100, 50)
+			default:
+				c = hct.New(beliefs[0]*360, beliefs[1]*100, beliefs[2]*100)
+			}
+			return colors.Uniform(c.AsRGBA())
+		}
+		s.Point.FillFunc = s.Point.ColorFunc
+	})
 
 	data := plot.Data{
 		plot.X: xs,
