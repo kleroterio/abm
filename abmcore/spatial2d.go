@@ -10,7 +10,6 @@ import (
 	"cogentcore.org/core/colors"
 	"cogentcore.org/core/colors/cam/hct"
 	"cogentcore.org/core/core"
-	"cogentcore.org/core/icons"
 	"cogentcore.org/core/styles"
 	"cogentcore.org/core/tree"
 	"cogentcore.org/lab/plot"
@@ -38,6 +37,9 @@ type Spatial2D struct {
 
 	// Sim is the simulation that this 2D representation is based on.
 	Sim abm.Sim
+
+	// Mode is the current preset plotting mode.
+	Mode Modes
 
 	// table is the data table for plotting.
 	table *table.Table
@@ -128,9 +130,8 @@ func (sp *Spatial2D) colorStyler(s *plot.Style) {
 }
 
 func (sp *Spatial2D) MakeToolbar(p *tree.Plan) {
-	tree.Add(p, func(w *core.Button) {
-		w.SetText("Spatial").SetIcon(icons.LocationOn)
-		w.SetTooltip("")
+	tree.Add(p, func(w *core.Switches) {
+		core.Bind(&sp.Mode, w)
 	})
 
 	sp.plot.MakeToolbar(p)

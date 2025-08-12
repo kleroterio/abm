@@ -18,7 +18,7 @@ func NewSim2D(parent ...tree.Node) *Sim2D { return tree.New[Sim2D](parent...) }
 // Sim is the simulation that this 2D representation is based on.
 func (t *Sim2D) SetSim(v abm.Sim) *Sim2D { t.Sim = v; return t }
 
-var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Spatial2D", IDName: "spatial2-d", Doc: "Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].", Embeds: []types.Field{{Name: "Frame"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "table", Doc: "table is the data table for plotting."}, {Name: "plot", Doc: "plot is the plot editor widget."}}})
+var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Spatial2D", IDName: "spatial2-d", Doc: "Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].", Embeds: []types.Field{{Name: "Frame"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "Mode", Doc: "Mode is the current preset plotting mode."}, {Name: "table", Doc: "table is the data table for plotting."}, {Name: "plot", Doc: "plot is the plot editor widget."}}})
 
 // NewSpatial2D returns a new [Spatial2D] with the given optional parent:
 // Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].
@@ -27,3 +27,7 @@ func NewSpatial2D(parent ...tree.Node) *Spatial2D { return tree.New[Spatial2D](p
 // SetSim sets the [Spatial2D.Sim]:
 // Sim is the simulation that this 2D representation is based on.
 func (t *Spatial2D) SetSim(v abm.Sim) *Spatial2D { t.Sim = v; return t }
+
+// SetMode sets the [Spatial2D.Mode]:
+// Mode is the current preset plotting mode.
+func (t *Spatial2D) SetMode(v Modes) *Spatial2D { t.Mode = v; return t }
