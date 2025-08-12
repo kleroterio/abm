@@ -62,8 +62,8 @@ func (sp *Spatial2D) MakePlot() *plot.Plot {
 	plot.Styler(beliefY, sp.colorStyler)
 
 	data := plot.Data{
-		plot.X: beliefX,
-		plot.Y: beliefY,
+		plot.X: spatialX,
+		plot.Y: spatialY,
 	}
 	plots.NewScatter(pl, data)
 
