@@ -45,13 +45,18 @@ func (sp *Spatial2D) Init() {
 // MakeTable creates the data table for plotting.
 func (sp *Spatial2D) MakeTable() {
 	sp.Table = table.New()
-	sp.Table.AddColumn("Spatial X", tensor.NewFloat32(1))
-	sp.Table.AddColumn("Spatial Y", tensor.NewFloat32(1))
-	sp.Table.AddColumn("Belief X", tensor.NewFloat32(1))
-	sp.Table.AddColumn("Belief Y", tensor.NewFloat32(1))
+	n := len(sp.Sim.Base().Agents)
+	sp.Table.AddColumn("Spatial X", tensor.NewFloat32(n))
+	sp.Table.AddColumn("Spatial Y", tensor.NewFloat32(n))
+	sp.Table.AddColumn("Belief X", tensor.NewFloat32(n))
+	sp.Table.AddColumn("Belief Y", tensor.NewFloat32(n))
 
 	plot.Styler(sp.Table.Column("Spatial Y"), sp.colorStyler)
 	plot.Styler(sp.Table.Column("Belief Y"), sp.colorStyler)
+
+	plot.Styler(sp.Table.Column("Spatial X"), func(s *plot.Style) {
+		s.Role = plot.X
+	})
 
 	sp.Editor.SetTable(sp.Table)
 }
@@ -74,6 +79,9 @@ func (sp *Spatial2D) UpdateTable() {
 
 // colorStyler is a plot styler that styles points based on agent beliefs.
 func (sp *Spatial2D) colorStyler(s *plot.Style) {
+	s.Line.On = plot.Off
+	s.Point.On = plot.On
+
 	agents := sp.Sim.Base().Agents
 	s.Point.ColorFunc = func(i int) image.Image {
 		beliefs := agents[i].Base().Beliefs
