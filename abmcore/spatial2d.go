@@ -42,16 +42,23 @@ func (sp *Spatial2D) MakePlot() *plot.Plot {
 
 	agents := sp.Sim.Base().Agents
 
-	xs := tensor.NewFloat32(len(agents))
-	ys := tensor.NewFloat32(len(agents))
+	n := len(agents)
+	spatialX := tensor.NewFloat32(n)
+	spatialY := tensor.NewFloat32(n)
+	beliefX := tensor.NewFloat32(n)
+	beliefY := tensor.NewFloat32(n)
 
 	for i, a := range agents {
 		pos := a.Base().Position
-		xs.Set(pos.X, i)
-		ys.Set(pos.Y, i)
+		spatialX.Set(pos.X, i)
+		spatialY.Set(pos.Y, i)
+
+		beliefs := a.Base().Beliefs
+		beliefX.Set(beliefs[0], i)
+		beliefY.Set(beliefs[1], i)
 	}
 
-	plot.Styler(ys, func(s *plot.Style) {
+	plot.Styler(spatialY, func(s *plot.Style) {
 		s.Point.ColorFunc = func(i int) image.Image {
 			beliefs := agents[i].Base().Beliefs
 			var c hct.HCT
@@ -69,8 +76,8 @@ func (sp *Spatial2D) MakePlot() *plot.Plot {
 	})
 
 	data := plot.Data{
-		plot.X: xs,
-		plot.Y: ys,
+		plot.X: spatialX,
+		plot.Y: spatialY,
 	}
 	plots.NewScatter(pl, data)
 
