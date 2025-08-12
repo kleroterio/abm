@@ -19,7 +19,7 @@ import (
 	"github.com/kleroterio/abm/abm"
 )
 
-// Modes are different preset modes for a [Spatial2D] plot.
+// Modes are different preset modes for a [Plot] plot.
 type Modes int32 //enums:enum -trim-prefix Mode
 
 const (
@@ -31,8 +31,8 @@ const (
 	ModeBelief
 )
 
-// Spatial2D is a 2d plot of a simulation based on the [abm.AgentBase.Position].
-type Spatial2D struct {
+// Plot is a customizable 2D plot of a simulation.
+type Plot struct {
 	core.Frame
 
 	// Sim is the simulation that this 2D representation is based on.
@@ -48,86 +48,86 @@ type Spatial2D struct {
 	plot *plotcore.Editor
 }
 
-func (sp *Spatial2D) Init() {
-	sp.Frame.Init()
-	sp.Styler(func(s *styles.Style) {
+func (pl *Plot) Init() {
+	pl.Frame.Init()
+	pl.Styler(func(s *styles.Style) {
 		s.Grow.Set(1, 1)
 		s.Direction = styles.Column
 	})
 
-	tree.AddChild(sp, func(w *core.Toolbar) {
-		w.Maker(sp.MakeToolbar)
+	tree.AddChild(pl, func(w *core.Toolbar) {
+		w.Maker(pl.MakeToolbar)
 	})
-	tree.AddChild(sp, func(w *plotcore.Editor) {
-		sp.plot = w
+	tree.AddChild(pl, func(w *plotcore.Editor) {
+		pl.plot = w
 
 		w.Updater(func() {
-			if sp.table == nil {
-				sp.MakeTable()
+			if pl.table == nil {
+				pl.MakeTable()
 			}
-			sp.UpdateTable()
+			pl.UpdateTable()
 		})
 	})
 }
 
 // MakeTable creates the data table for plotting.
-func (sp *Spatial2D) MakeTable() {
-	sp.table = table.New()
-	n := len(sp.Sim.Base().Agents)
-	sp.table.AddColumn("Spatial X", tensor.NewFloat32(n))
-	sp.table.AddColumn("Spatial Y", tensor.NewFloat32(n))
-	sp.table.AddColumn("Belief X", tensor.NewFloat32(n))
-	sp.table.AddColumn("Belief Y", tensor.NewFloat32(n))
+func (pl *Plot) MakeTable() {
+	pl.table = table.New()
+	n := len(pl.Sim.Base().Agents)
+	pl.table.AddColumn("Spatial X", tensor.NewFloat32(n))
+	pl.table.AddColumn("Spatial Y", tensor.NewFloat32(n))
+	pl.table.AddColumn("Belief X", tensor.NewFloat32(n))
+	pl.table.AddColumn("Belief Y", tensor.NewFloat32(n))
 
-	plot.Styler(sp.table.Column("Spatial Y"), sp.colorStyler)
-	plot.Styler(sp.table.Column("Belief Y"), sp.colorStyler)
+	plot.Styler(pl.table.Column("Spatial Y"), pl.colorStyler)
+	plot.Styler(pl.table.Column("Belief Y"), pl.colorStyler)
 
-	plot.Styler(sp.table.Column("Spatial X"), func(s *plot.Style) {
-		if sp.Mode == ModeSpatial {
+	plot.Styler(pl.table.Column("Spatial X"), func(s *plot.Style) {
+		if pl.Mode == ModeSpatial {
 			s.Role = plot.X
 		} else {
 			s.Role = plot.Y
 		}
 	})
-	plot.Styler(sp.table.Column("Spatial Y"), func(s *plot.Style) {
-		s.On = sp.Mode == ModeSpatial
+	plot.Styler(pl.table.Column("Spatial Y"), func(s *plot.Style) {
+		s.On = pl.Mode == ModeSpatial
 	})
-	plot.Styler(sp.table.Column("Belief X"), func(s *plot.Style) {
-		if sp.Mode == ModeBelief {
+	plot.Styler(pl.table.Column("Belief X"), func(s *plot.Style) {
+		if pl.Mode == ModeBelief {
 			s.Role = plot.X
 		} else {
 			s.Role = plot.Y
 		}
 	})
-	plot.Styler(sp.table.Column("Belief Y"), func(s *plot.Style) {
-		s.On = sp.Mode == ModeBelief
+	plot.Styler(pl.table.Column("Belief Y"), func(s *plot.Style) {
+		s.On = pl.Mode == ModeBelief
 	})
 
-	sp.plot.SetTable(sp.table)
+	pl.plot.SetTable(pl.table)
 }
 
 // UpdateTable updates the data table with the current agent data.
-func (sp *Spatial2D) UpdateTable() {
-	agents := sp.Sim.Base().Agents
-	sp.table.SetNumRows(len(agents))
+func (pl *Plot) UpdateTable() {
+	agents := pl.Sim.Base().Agents
+	pl.table.SetNumRows(len(agents))
 
 	for i, a := range agents {
 		pos := a.Base().Position
-		sp.table.Column("Spatial X").SetFloat(float64(pos.X), i)
-		sp.table.Column("Spatial Y").SetFloat(float64(pos.Y), i)
+		pl.table.Column("Spatial X").SetFloat(float64(pos.X), i)
+		pl.table.Column("Spatial Y").SetFloat(float64(pos.Y), i)
 
 		beliefs := a.Base().Beliefs
-		sp.table.Column("Belief X").SetFloat(float64(beliefs[0]), i)
-		sp.table.Column("Belief Y").SetFloat(float64(beliefs[1]), i)
+		pl.table.Column("Belief X").SetFloat(float64(beliefs[0]), i)
+		pl.table.Column("Belief Y").SetFloat(float64(beliefs[1]), i)
 	}
 }
 
 // colorStyler is a plot styler that styles points based on agent beliefs.
-func (sp *Spatial2D) colorStyler(s *plot.Style) {
+func (pl *Plot) colorStyler(s *plot.Style) {
 	s.Line.On = plot.Off
 	s.Point.On = plot.On
 
-	agents := sp.Sim.Base().Agents
+	agents := pl.Sim.Base().Agents
 	s.Point.ColorFunc = func(i int) image.Image {
 		beliefs := agents[i].Base().Beliefs
 
@@ -146,10 +146,10 @@ func (sp *Spatial2D) colorStyler(s *plot.Style) {
 	s.Point.FillFunc = s.Point.ColorFunc
 }
 
-func (sp *Spatial2D) MakeToolbar(p *tree.Plan) {
+func (pl *Plot) MakeToolbar(p *tree.Plan) {
 	tree.Add(p, func(w *core.Switches) {
-		core.Bind(&sp.Mode, w)
+		core.Bind(&pl.Mode, w)
 	})
 
-	sp.plot.MakeToolbar(p)
+	pl.plot.MakeToolbar(p)
 }
