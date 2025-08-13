@@ -12,6 +12,9 @@ type Sim interface {
 
 	// Init initializes the simulation with default values.
 	Init()
+
+	// Step advances the simulation by one time step.
+	Step()
 }
 
 // NewSim creates and initializes a new simulation of type S.

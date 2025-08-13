@@ -45,4 +45,11 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 			sw.Update()
 		})
 	})
+	tree.Add(p, func(w *core.Button) {
+		w.SetText("Step").SetIcon(icons.Step)
+		w.OnClick(func(e events.Event) {
+			sw.Sim.Step()
+			sw.Update()
+		})
+	})
 }
