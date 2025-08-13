@@ -4,6 +4,12 @@
 
 package abm
 
+import (
+	"math/rand/v2"
+
+	"cogentcore.org/core/math32"
+)
+
 // SimBase is the base type for all simulations.
 type SimBase struct {
 
@@ -47,10 +53,20 @@ func (sb *SimBase) Step() {
 				continue
 			}
 			dist := a.Base().Position.DistanceToSquared(other.Base().Position)
-			if dist < ir {
-				a.Base().Interact(other)
-				break
+			if dist > ir {
+				continue
 			}
+			beliefDist := float32(0)
+			for i, ba := range a.Base().Beliefs {
+				delta := other.Base().Beliefs[i] - ba
+				beliefDist += delta * delta
+			}
+			beliefDist = math32.Sqrt(beliefDist)
+			if rand.Float32() < beliefDist {
+				continue
+			}
+			a.Base().Interact(other)
+			break
 		}
 	}
 }
