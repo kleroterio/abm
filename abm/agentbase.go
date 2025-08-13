@@ -49,13 +49,19 @@ func (ab *AgentBase) Init(sim Sim) {
 	ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
 	ab.Beliefs = make([]float32, sb.Config.Base().Beliefs)
 	for i := range ab.Beliefs {
-		ab.Beliefs[i] = rand.Float32()
+		r := rand.Float32()
+		if r < 0.5 {
+			r /= 2
+		} else {
+			r = 1 - ((1 - r) / 2)
+		}
+		ab.Beliefs[i] = r
 	}
 }
 
 // Tensor returns the agent's beliefs and position as a tensor.
 func (ab *AgentBase) Tensor() *tensor.Float32 {
-	return tensor.NewFloat32FromValues(append(ab.Beliefs, ab.Position.X, ab.Position.Y)...)
+	return tensor.NewFloat32FromValues(append(ab.Beliefs)...)
 }
 
 // Interact has the agent interact with the given other agent.
