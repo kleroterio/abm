@@ -4,10 +4,6 @@
 
 package abm
 
-import (
-	"cogentcore.org/core/math32"
-)
-
 // SimBase is the base type for all simulations.
 type SimBase struct {
 
@@ -36,8 +32,6 @@ func (sb *SimBase) Init() {
 		a.Init(sb.This)
 	}
 }
-
-var zeroVec, oneVec = math32.Vector2{}, math32.Vec2(1, 1)
 
 // Step advances the simulation by one time step.
 // It does this by having each agent interact with one or more randomly

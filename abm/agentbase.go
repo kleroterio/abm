@@ -67,6 +67,8 @@ func (ab *AgentBase) Init(sim Sim) {
 	ab.Influence = rand.Float32()
 }
 
+var zeroVec, oneVec = math32.Vector2{}, math32.Vec2(1, 1)
+
 // StepPosition updates the agent's position and velocity one time step.
 func (ab *AgentBase) StepPosition() {
 	cb := ab.Sim.Base().Config.Base()
