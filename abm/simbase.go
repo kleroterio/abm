@@ -5,6 +5,8 @@
 package abm
 
 import (
+	"strings"
+
 	"cogentcore.org/core/base/errors"
 	"cogentcore.org/lab/stats/metric"
 	"github.com/mroth/weightedrand/v2"
@@ -52,9 +54,18 @@ func (sb *SimBase) Step() {
 			}
 			ot := other.Base().Tensor()
 			dist := metric.L2Norm(at, ot).Float(0)
+			if dist > float64(sb.Config.Base().InteractionRadius) {
+				continue
+			}
 			choices = append(choices, weightedrand.NewChoice(j, int(100/dist)))
 		}
-		chooser := errors.Log1(weightedrand.NewChooser(choices...))
+		chooser, err := weightedrand.NewChooser(choices...)
+		if err != nil {
+			if !strings.Contains(err.Error(), "zero Choices with Weight >= 1") {
+				errors.Log(err)
+			}
+			continue
+		}
 
 		for range sb.Config.Base().Interactions {
 			j := chooser.Pick()

@@ -13,6 +13,10 @@ type ConfigBase struct { //types:add
 	// Interactions is the number of interactions per agent per step.
 	Interactions int `default:"2"`
 
+	// InteractionRadius is the maximum distance between agents for an
+	// interaction to occur.
+	InteractionRadius float32 `default:"0.2"`
+
 	// InteractionEffect is how much an interaction impacts beliefs as a
 	// proportion of the initial difference in beliefs.
 	InteractionEffect float32 `default:"0.01"`
