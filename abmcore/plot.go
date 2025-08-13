@@ -133,8 +133,9 @@ func (pl *Plot) UpdateTable() {
 func (pl *Plot) colorStyler(s *plot.Style) {
 	s.Line.On = plot.Off
 	s.Point.On = plot.On
-	s.Range.SetMin(0).SetMax(1)
-	s.Plot.XAxis.Range.SetMin(0).SetMax(1)
+	// need a little extra room to avoid plot shifting
+	s.Range.SetMin(-0.02).SetMax(1.02)
+	s.Plot.XAxis.Range.SetMin(-0.02).SetMax(1.02)
 	s.Point.Size.Pt(5)
 
 	agents := pl.Sim.Base().Agents
