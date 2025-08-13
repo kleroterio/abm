@@ -45,7 +45,7 @@ func (sb *SimBase) Step() {
 				continue
 			}
 			dist := a.Base().Position.DistanceToSquared(other.Base().Position)
-			if dist < 0.01 {
+			if dist < sb.Config.Base().InteractionRadius {
 				a.Base().Interact(other)
 				break
 			}
