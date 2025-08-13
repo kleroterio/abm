@@ -37,6 +37,8 @@ func (sb *SimBase) Init() {
 // It does this by having each agent interact with one or more randomly
 // selected agents as determined by the configuration parameters.
 func (sb *SimBase) Step() {
+	cb := sb.Config.Base()
+	ir := cb.InteractionRadius / float32(len(sb.Agents))
 	for i, a := range sb.Agents {
 		a.Base().StepPosition()
 		a.Base().ApplyValues()
@@ -45,7 +47,7 @@ func (sb *SimBase) Step() {
 				continue
 			}
 			dist := a.Base().Position.DistanceToSquared(other.Base().Position)
-			if dist < sb.Config.Base().InteractionRadius {
+			if dist < ir {
 				a.Base().Interact(other)
 				break
 			}
