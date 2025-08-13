@@ -44,8 +44,10 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 	tree.Add(p, func(w *core.Button) {
 		w.SetText("Reset").SetIcon(icons.Update)
 		w.OnClick(func(e events.Event) {
+			sw.running = false
 			sw.Sim.Init()
 			sw.Update()
+			sw.Scene.Restyle()
 		})
 	})
 	tree.Add(p, func(w *core.Button) {
