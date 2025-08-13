@@ -10,6 +10,9 @@ type ConfigBase struct { //types:add
 	// Beliefs is the number of political belief axes in the simulation.
 	Beliefs int `default:"2"`
 
+	// SpatialSpeed is the speed at which agents randomly move spatially.
+	SpatialSpeed float32 `default:"0.01"`
+
 	// Interactions is the number of interactions per agent per step.
 	Interactions int `default:"2"`
 
