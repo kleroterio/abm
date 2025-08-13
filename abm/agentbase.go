@@ -87,9 +87,11 @@ func (ab *AgentBase) InteractionWeight(at *tensor.Float32, other Agent) int {
 // Interact has the agent interact with the given other agent.
 func (ab *AgentBase) Interact(other Agent) {
 	ie := ab.Sim.Base().Config.Base().InteractionEffect
+	ai := ab.Influence
+	oi := other.Base().Influence
 	for i, b := range ab.Beliefs {
 		delta := ie * (other.Base().Beliefs[i] - b)
-		ab.Beliefs[i] += delta
-		other.Base().Beliefs[i] -= delta
+		ab.Beliefs[i] += delta * (oi / ai)
+		other.Base().Beliefs[i] -= delta * (ai / oi)
 	}
 }
