@@ -6,7 +6,6 @@ package abm
 
 import (
 	"cogentcore.org/core/base/errors"
-	"cogentcore.org/lab/stats/metric"
 	"github.com/mroth/weightedrand/v2"
 )
 
@@ -50,12 +49,11 @@ func (sb *SimBase) Step() {
 			if i == j {
 				continue
 			}
-			ot := other.Base().Tensor()
-			dist := metric.L2Norm(at, ot).Float(0)
-			if dist > float64(sb.Config.Base().InteractionRadius) {
+			weight := a.Base().InteractionWeight(at, other)
+			if weight == 0 {
 				continue
 			}
-			choices = append(choices, weightedrand.NewChoice(j, int(100/dist)))
+			choices = append(choices, weightedrand.NewChoice(j, weight))
 		}
 		if len(choices) == 0 {
 			continue // no one to interact with

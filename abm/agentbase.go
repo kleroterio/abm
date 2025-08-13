@@ -10,6 +10,7 @@ import (
 	"sync/atomic"
 
 	"cogentcore.org/core/math32"
+	"cogentcore.org/lab/stats/metric"
 	"cogentcore.org/lab/tensor"
 )
 
@@ -68,6 +69,19 @@ func (ab *AgentBase) Tensor() *tensor.Float32 {
 	}
 	pos := ab.Position.MulScalar(cb.SpatialWeight)
 	return tensor.NewFloat32FromValues(append(beliefs, pos.X, pos.Y)...)
+}
+
+// InteractionWeight returns the integer weight of how much this agent should be
+// relatively likely to interact with the given other agent.
+func (ab *AgentBase) InteractionWeight(at *tensor.Float32, other Agent) int {
+	ot := other.Base().Tensor()
+	dist := metric.L2Norm(at, ot).Float(0)
+	cb := ab.Sim.Base().Config.Base()
+	if dist > float64(cb.InteractionRadius) {
+		return 0
+	}
+	weight := other.Base().Influence * 100 / float32(dist)
+	return int(weight)
 }
 
 // Interact has the agent interact with the given other agent.
