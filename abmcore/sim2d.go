@@ -67,6 +67,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.SetText("Stop").SetIcon(icons.Stop)
 		w.OnClick(func(e events.Event) {
 			sw.running = false
+			w.Restyle()
 		})
 		w.FirstStyler(func(s *styles.Style) {
 			s.SetEnabled(sw.running)
