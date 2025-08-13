@@ -126,6 +126,8 @@ func (pl *Plot) UpdateTable() {
 func (pl *Plot) colorStyler(s *plot.Style) {
 	s.Line.On = plot.Off
 	s.Point.On = plot.On
+	s.Range.SetMin(0).SetMax(1)
+	s.Plot.XAxis.Range.SetMin(0).SetMax(1)
 
 	agents := pl.Sim.Base().Agents
 	s.Point.ColorFunc = func(i int) image.Image {
