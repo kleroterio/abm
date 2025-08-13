@@ -15,7 +15,7 @@ type ConfigBase struct { //types:add
 
 	// InteractionEffect is how much an interaction impacts beliefs as a
 	// proportion of the initial difference in beliefs.
-	InteractionEffect float32 `default:"0.1"`
+	InteractionEffect float32 `default:"0.01"`
 }
 
 func (cb *ConfigBase) Base() *ConfigBase {
