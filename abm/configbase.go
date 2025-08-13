@@ -15,7 +15,7 @@ type ConfigBase struct { //types:add
 
 	// InteractionRadius is the maximum distance between agents for an
 	// interaction to occur.
-	InteractionRadius float32 `default:"0.2"`
+	InteractionRadius float32 `default:"0.3"`
 
 	// InteractionEffect is how much an interaction impacts beliefs as a
 	// proportion of the initial difference in beliefs.

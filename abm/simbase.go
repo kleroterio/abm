@@ -5,8 +5,6 @@
 package abm
 
 import (
-	"strings"
-
 	"cogentcore.org/core/base/errors"
 	"cogentcore.org/lab/stats/metric"
 	"github.com/mroth/weightedrand/v2"
@@ -59,11 +57,11 @@ func (sb *SimBase) Step() {
 			}
 			choices = append(choices, weightedrand.NewChoice(j, int(100/dist)))
 		}
+		if len(choices) == 0 {
+			continue // no one to interact with
+		}
 		chooser, err := weightedrand.NewChooser(choices...)
-		if err != nil {
-			if !strings.Contains(err.Error(), "zero Choices with Weight >= 1") {
-				errors.Log(err)
-			}
+		if errors.Log(err) != nil {
 			continue
 		}
 
