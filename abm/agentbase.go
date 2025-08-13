@@ -36,6 +36,11 @@ type AgentBase struct {
 	// Beliefs contains the agent's beliefs on each belief axis (0 to 1).
 	Beliefs []float32
 
+	// Values contains the agent's values on each belief axis (0 to 1).
+	// Each value corresponds to the belief on the same axis, but values
+	// are immutable unlike beliefs.
+	Values []float32
+
 	// Influence is the agent's influence on others in the simulation
 	// (initial value 0 to 1).
 	Influence float32
@@ -57,6 +62,7 @@ func (ab *AgentBase) Init(sim Sim) {
 	for i := range ab.Beliefs {
 		ab.Beliefs[i] = rand.Float32()
 	}
+	ab.Values = slices.Clone(ab.Beliefs)
 	ab.Influence = rand.Float32()
 }
 
