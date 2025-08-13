@@ -6,6 +6,7 @@ package abm
 
 import (
 	"math/rand/v2"
+	"slices"
 	"sync/atomic"
 
 	"cogentcore.org/core/math32"
@@ -53,9 +54,15 @@ func (ab *AgentBase) Init(sim Sim) {
 	}
 }
 
-// Tensor returns the agent's beliefs and position as a tensor.
+// Tensor returns the agent's weighted beliefs and position as a tensor.
 func (ab *AgentBase) Tensor() *tensor.Float32 {
-	return tensor.NewFloat32FromValues(append(ab.Beliefs, ab.Position.X, ab.Position.Y)...)
+	cb := ab.Sim.Base().Config.Base()
+	beliefs := slices.Clone(ab.Beliefs)
+	for i := range beliefs {
+		beliefs[i] *= cb.BeliefWeight
+	}
+	pos := ab.Position.MulScalar(cb.SpatialWeight)
+	return tensor.NewFloat32FromValues(append(beliefs, pos.X, pos.Y)...)
 }
 
 // Interact has the agent interact with the given other agent.

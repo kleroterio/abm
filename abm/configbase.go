@@ -13,6 +13,13 @@ type ConfigBase struct { //types:add
 	// Interactions is the number of interactions per agent per step.
 	Interactions int `default:"2"`
 
+	// SpatialWeight is the importance of spatial proximity in determing who to
+	// interact with.
+	SpatialWeight float32 `default:"1"`
+
+	// BeliefWeight is the importance of beliefs in determing who to interact with.
+	BeliefWeight float32 `default:"1"`
+
 	// InteractionRadius is the maximum distance between agents for an
 	// interaction to occur.
 	InteractionRadius float32 `default:"0.3"`
