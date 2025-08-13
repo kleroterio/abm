@@ -45,6 +45,7 @@ var zeroVec, oneVec = math32.Vector2{}, math32.Vec2(1, 1)
 func (sb *SimBase) Step() {
 	for i, a := range sb.Agents {
 		a.Base().StepPosition()
+		a.Base().ApplyValues()
 		for j, other := range sb.Agents {
 			if i == j {
 				continue

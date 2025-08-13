@@ -103,6 +103,16 @@ func (ab *AgentBase) StepPosition() {
 	ab.Position.Clamp(zeroVec, oneVec)
 }
 
+// ApplyValues applies the restorative effect of the agent's values on its beliefs.
+func (ab *AgentBase) ApplyValues() {
+	cb := ab.Sim.Base().Config.Base()
+	for i := range ab.Beliefs {
+		ba := &ab.Beliefs[i]
+		*ba += cb.ValueEffect * (ab.Values[i] - *ba)
+		*ba = math32.Clamp(*ba, 0, 1)
+	}
+}
+
 // Interact has the agent interact with the given other agent.
 func (ab *AgentBase) Interact(other Agent) {
 	cb := ab.Sim.Base().Config.Base()
@@ -115,8 +125,6 @@ func (ab *AgentBase) Interact(other Agent) {
 		delta := cb.InteractionEffect * (*bo - *ba)
 		*ba += delta * (oi / ai)
 		*bo -= delta * (ai / oi)
-
-		*ba += cb.ValueEffect * (ab.Values[i] - *ba)
 
 		*ba = math32.Clamp(*ba, 0, 1)
 		*bo = math32.Clamp(*bo, 0, 1)
