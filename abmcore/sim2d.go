@@ -19,6 +19,9 @@ type Sim2D struct {
 
 	// Sim is the simulation that this 2D representation is based on.
 	Sim abm.Sim
+
+	// running is whether the simulation is currently running.
+	running bool
 }
 
 func (sw *Sim2D) Init() {
@@ -43,6 +46,30 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.OnClick(func(e events.Event) {
 			sw.Sim.Init()
 			sw.Update()
+		})
+	})
+	tree.Add(p, func(w *core.Button) {
+		w.SetText("Run").SetIcon(icons.PlayArrow)
+		w.OnClick(func(e events.Event) {
+			sw.running = true
+			sw.Scene.Restyle()
+			sw.Animate(func(a *core.Animation) {
+				if !sw.running {
+					a.Done = true
+					return
+				}
+				sw.Sim.Step()
+				sw.Update()
+			})
+		})
+	})
+	tree.Add(p, func(w *core.Button) {
+		w.SetText("Stop").SetIcon(icons.Stop)
+		w.OnClick(func(e events.Event) {
+			sw.running = false
+		})
+		w.FirstStyler(func(s *styles.Style) {
+			s.SetEnabled(sw.running)
 		})
 	})
 	tree.Add(p, func(w *core.Button) {
