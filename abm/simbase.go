@@ -5,8 +5,9 @@
 package abm
 
 import (
-	"cogentcore.org/core/base/errors"
-	"github.com/mroth/weightedrand/v2"
+	"math/rand/v2"
+
+	"cogentcore.org/core/math32"
 )
 
 // SimBase is the base type for all simulations.
@@ -38,35 +39,25 @@ func (sb *SimBase) Init() {
 	}
 }
 
+var zeroVec, oneVec = math32.Vector2{}, math32.Vec2(1, 1)
+
 // Step advances the simulation by one time step.
 // It does this by having each agent interact with one or more randomly
 // selected agents as determined by the configuration parameters.
 func (sb *SimBase) Step() {
 	for i, a := range sb.Agents {
-		at := a.Base().Tensor()
-		choices := []weightedrand.Choice[int, int]{}
+		delta := math32.Vec2(rand.Float32(), rand.Float32()).SubScalar(0.5).MulScalar(0.01)
+		a.Base().Position.SetAdd(delta)
+		a.Base().Position.Clamp(zeroVec, oneVec)
 		for j, other := range sb.Agents {
 			if i == j {
 				continue
 			}
-			weight := a.Base().InteractionWeight(at, other)
-			if weight == 0 {
-				continue
+			dist := a.Base().Position.DistanceToSquared(other.Base().Position)
+			if dist < 0.01 {
+				a.Base().Interact(other)
+				break
 			}
-			choices = append(choices, weightedrand.NewChoice(j, weight))
-		}
-		if len(choices) == 0 {
-			continue // no one to interact with
-		}
-		chooser, err := weightedrand.NewChooser(choices...)
-		if errors.Log(err) != nil {
-			continue
-		}
-
-		for range sb.Config.Base().Interactions {
-			j := chooser.Pick()
-			other := sb.Agents[j]
-			a.Base().Interact(other)
 		}
 	}
 }
