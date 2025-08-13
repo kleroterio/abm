@@ -10,13 +10,12 @@ type ConfigBase struct { //types:add
 	// Beliefs is the number of political belief axes in the simulation.
 	Beliefs int `default:"2"`
 
-	// SpatialNeighbors is the number of agents each agent will be connected to
-	// by virtue of their spatial proximity.
-	SpatialNeighbors int `default:"5"`
+	// Interactions is the number of interactions per agent per step.
+	Interactions int `default:"2"`
 
-	// BeliefNeighbors is the number of agents each agent will be connected to
-	// by virtue of their proximity in political beliefs.
-	BeliefNeighbors int `default:"5"`
+	// InteractionEffect is how much an interaction impacts beliefs as a
+	// proportion of the initial difference in beliefs.
+	InteractionEffect float32 `default:"0.1"`
 }
 
 func (cb *ConfigBase) Base() *ConfigBase {

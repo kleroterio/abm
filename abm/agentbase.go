@@ -9,6 +9,7 @@ import (
 	"sync/atomic"
 
 	"cogentcore.org/core/math32"
+	"cogentcore.org/lab/tensor"
 )
 
 // AgentBase is the base type for all agents.
@@ -49,5 +50,20 @@ func (ab *AgentBase) Init(sim Sim) {
 	ab.Beliefs = make([]float32, sb.Config.Base().Beliefs)
 	for i := range ab.Beliefs {
 		ab.Beliefs[i] = rand.Float32()
+	}
+}
+
+// Tensor returns the agent's beliefs and position as a tensor.
+func (ab *AgentBase) Tensor() *tensor.Float32 {
+	return tensor.NewFloat32FromValues(append(ab.Beliefs, ab.Position.X, ab.Position.Y)...)
+}
+
+// Interact has the agent interact with the given other agent.
+func (ab *AgentBase) Interact(other Agent) {
+	ie := ab.Sim.Base().Config.Base().InteractionEffect
+	for i, b := range ab.Beliefs {
+		delta := ie * (other.Base().Beliefs[i] - b)
+		ab.Beliefs[i] += delta
+		other.Base().Beliefs[i] -= delta
 	}
 }

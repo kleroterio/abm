@@ -4,6 +4,12 @@
 
 package abm
 
+import (
+	"cogentcore.org/core/base/errors"
+	"cogentcore.org/lab/stats/metric"
+	"github.com/mroth/weightedrand/v2"
+)
+
 // SimBase is the base type for all simulations.
 type SimBase struct {
 
@@ -30,5 +36,30 @@ func (sb *SimBase) Base() *SimBase {
 func (sb *SimBase) Init() {
 	for _, a := range sb.Agents {
 		a.Init(sb.This)
+	}
+}
+
+// Step advances the simulation by one time step.
+// It does this by having each agent interact with one or more randomly
+// selected agents as determined by the configuration parameters.
+func (sb *SimBase) Step() {
+	for i, a := range sb.Agents {
+		at := a.Base().Tensor()
+		choices := []weightedrand.Choice[int, int]{}
+		for j, other := range sb.Agents {
+			if i == j {
+				continue
+			}
+			ot := other.Base().Tensor()
+			dist := metric.L2Norm(at, ot).Float(0)
+			choices = append(choices, weightedrand.NewChoice(j, int(100/dist)))
+		}
+		chooser := errors.Log1(weightedrand.NewChooser(choices...))
+
+		for range sb.Config.Base().Interactions {
+			j := chooser.Pick()
+			other := sb.Agents[j]
+			a.Base().Interact(other)
+		}
 	}
 }
