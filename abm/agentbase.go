@@ -95,11 +95,17 @@ func (ab *AgentBase) Interact(other Agent) {
 	cb := ab.Sim.Base().Config.Base()
 	ai := ab.Influence
 	oi := other.Base().Influence
-	for i, b := range ab.Beliefs {
-		delta := cb.InteractionEffect * (other.Base().Beliefs[i] - b)
-		ab.Beliefs[i] += delta * (oi / ai)
-		other.Base().Beliefs[i] -= delta * (ai / oi)
+	for i := range ab.Beliefs {
+		ba := &ab.Beliefs[i]
+		bo := &other.Base().Beliefs[i]
 
-		ab.Beliefs[i] += cb.ValueEffect * (ab.Values[i] - ab.Beliefs[i])
+		delta := cb.InteractionEffect * (*bo - *ba)
+		*ba += delta * (oi / ai)
+		*bo -= delta * (ai / oi)
+
+		*ba += cb.ValueEffect * (ab.Values[i] - *ba)
+
+		*ba = math32.Clamp(*ba, 0, 1)
+		*bo = math32.Clamp(*bo, 0, 1)
 	}
 }
