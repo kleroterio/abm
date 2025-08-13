@@ -14,7 +14,7 @@ type Sim struct {
 }
 
 func (s *Sim) Init() {
-	s.Agents = make([]abm.Agent, 100)
+	s.Agents = make([]abm.Agent, s.Config.(*Config).Population)
 	for i := range s.Agents {
 		s.Agents[i] = &abm.AgentBase{}
 	}
