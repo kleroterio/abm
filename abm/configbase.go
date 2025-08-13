@@ -17,8 +17,8 @@ type ConfigBase struct { //types:add
 	// agents move.
 	VelocityMultiplier float32 `default:"0.01"`
 
-	// InteractionRadius is the multiplier on the maximum distance between agents
-	// for an interaction to occur, with the base value being 1/n
+	// InteractionRadius is the multiplier on the maximum squared distance between
+	// agents for an interaction to occur, with the base value being 1/n
 	// (n = total number of agents).
 	InteractionRadius float32 `default:"1"`
 
