@@ -27,6 +27,9 @@ type AgentBase struct {
 	// (each axis is from 0 to 1).
 	Position math32.Vector2
 
+	// Velocity is the current velocity of the agent in the simulation space.
+	Velocity math32.Vector2
+
 	// Connections holds the connections between this agent and others.
 	// The key is the ID of the connected agent, and the value is the strength of
 	// the connection (-1 to 1), with negative values indicating an oppositional
@@ -88,6 +91,16 @@ func (ab *AgentBase) InteractionWeight(at *tensor.Float32, other Agent) int {
 	}
 	weight := other.Base().Influence * 100 / float32(dist)
 	return int(weight)
+}
+
+// StepPosition updates the agent's position and velocity one time step.
+func (ab *AgentBase) StepPosition() {
+	cb := ab.Sim.Base().Config.Base()
+	if rand.Float32() < cb.ChangeVelocity {
+		ab.Velocity = math32.Vec2(rand.Float32(), rand.Float32()).SubScalar(0.5).MulScalar(cb.SpatialSpeed)
+	}
+	ab.Position.SetAdd(ab.Velocity)
+	ab.Position.Clamp(zeroVec, oneVec)
 }
 
 // Interact has the agent interact with the given other agent.

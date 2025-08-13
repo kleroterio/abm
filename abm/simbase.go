@@ -5,8 +5,6 @@
 package abm
 
 import (
-	"math/rand/v2"
-
 	"cogentcore.org/core/math32"
 )
 
@@ -46,9 +44,7 @@ var zeroVec, oneVec = math32.Vector2{}, math32.Vec2(1, 1)
 // selected agents as determined by the configuration parameters.
 func (sb *SimBase) Step() {
 	for i, a := range sb.Agents {
-		delta := math32.Vec2(rand.Float32(), rand.Float32()).SubScalar(0.5).MulScalar(sb.Config.Base().SpatialSpeed)
-		a.Base().Position.SetAdd(delta)
-		a.Base().Position.Clamp(zeroVec, oneVec)
+		a.Base().StepPosition()
 		for j, other := range sb.Agents {
 			if i == j {
 				continue
