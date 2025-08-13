@@ -22,11 +22,17 @@ type ConfigBase struct { //types:add
 
 	// InteractionRadius is the maximum distance between agents for an
 	// interaction to occur.
-	InteractionRadius float32 `default:"0.3"`
+	InteractionRadius float32 `default:"0.4"`
 
 	// InteractionEffect is how much an interaction impacts beliefs as a
 	// proportion of the initial difference in beliefs.
 	InteractionEffect float32 `default:"0.01"`
+
+	// ValueEffect is how much an agent's immutable values impact their beliefs
+	// as a proportion of the difference between beliefs and values.
+	// Values have a kind of restorative force, pulling beliefs back to the original
+	// values over time.
+	ValueEffect float32 `default:"0.005"`
 }
 
 func (cb *ConfigBase) Base() *ConfigBase {
