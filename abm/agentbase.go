@@ -30,10 +30,14 @@ type AgentBase struct {
 	// The key is the ID of the connected agent, and the value is the strength of
 	// the connection (-1 to 1), with negative values indicating an oppositional
 	// connection.
-	Connections map[uint]float32
+	// Connections map[uint]float32
 
 	// Beliefs contains the agent's beliefs on each belief axis (0 to 1).
 	Beliefs []float32
+
+	// Influence is the agent's influence on others in the simulation
+	// (initial value 0 to 1).
+	Influence float32
 }
 
 func (ab *AgentBase) Base() *AgentBase {
@@ -52,6 +56,7 @@ func (ab *AgentBase) Init(sim Sim) {
 	for i := range ab.Beliefs {
 		ab.Beliefs[i] = rand.Float32()
 	}
+	ab.Influence = rand.Float32()
 }
 
 // Tensor returns the agent's weighted beliefs and position as a tensor.

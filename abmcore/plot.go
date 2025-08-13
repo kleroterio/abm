@@ -78,9 +78,14 @@ func (pl *Plot) MakeTable() {
 	pl.table.AddColumn("Spatial Y", tensor.NewFloat32(n))
 	pl.table.AddColumn("Belief X", tensor.NewFloat32(n))
 	pl.table.AddColumn("Belief Y", tensor.NewFloat32(n))
+	pl.table.AddColumn("Influence", tensor.NewFloat32(n))
 
 	plot.Styler(pl.table.Column("Spatial Y"), pl.colorStyler)
 	plot.Styler(pl.table.Column("Belief Y"), pl.colorStyler)
+
+	plot.Styler(pl.table.Column("Influence"), func(s *plot.Style) {
+		s.Role = plot.Size
+	})
 
 	plot.Styler(pl.table.Column("Spatial X"), func(s *plot.Style) {
 		if pl.Mode == ModeSpatial {
@@ -119,6 +124,8 @@ func (pl *Plot) UpdateTable() {
 		beliefs := a.Base().Beliefs
 		pl.table.Column("Belief X").SetFloat(float64(beliefs[0]), i)
 		pl.table.Column("Belief Y").SetFloat(float64(beliefs[1]), i)
+
+		pl.table.Column("Influence").SetFloat(float64(a.Base().Influence), i)
 	}
 }
 
