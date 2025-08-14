@@ -10,6 +10,7 @@ import (
 	"cogentcore.org/core/core"
 	"cogentcore.org/core/styles"
 	"cogentcore.org/core/tree"
+	"cogentcore.org/lab/plot"
 	"cogentcore.org/lab/plotcore"
 	"cogentcore.org/lab/stats/stats"
 	"cogentcore.org/lab/table"
@@ -49,6 +50,11 @@ func (st *Stats) Init() {
 func (st *Stats) makeTable() {
 	st.table = table.New()
 	st.table.AddColumn("Polarization", tensor.NewFloat32(1))
+
+	plot.Styler(st.table.Column("Polarization"), func(s *plot.Style) {
+		s.On = true
+		s.Range.SetMin(0).SetMax(0.5)
+	})
 
 	st.plot.SetTable(st.table)
 }
