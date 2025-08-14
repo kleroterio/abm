@@ -59,14 +59,17 @@ func (ab *AgentBase) Init(sim Sim) {
 	ab.Sim = sim
 	ab.ID = atomic.AddUint64(&sb.idCounter, 1) - 1
 
-	ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
 	ab.Beliefs = make([]float32, cb.Beliefs)
 	for i := range ab.Beliefs {
 		ab.Beliefs[i] = rand.Float32()
 	}
 	ab.Values = slices.Clone(ab.Beliefs)
-	// ab.Position.Set(ab.Beliefs[0], ab.Beliefs[1])
 	ab.Influence = cb.RandomInfluence*rand.Float32() + (1 - cb.RandomInfluence)
+	if cb.PartisanPosition && cb.Beliefs >= 2 {
+		ab.Position.Set(ab.Beliefs[0], ab.Beliefs[1])
+	} else {
+		ab.Position = math32.Vec2(rand.Float32(), rand.Float32())
+	}
 }
 
 var zeroVec, oneVec = math32.Vector2{}, math32.Vec2(1, 1)

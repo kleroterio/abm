@@ -10,6 +10,11 @@ type ConfigBase struct { //types:add
 	// Beliefs is the number of political belief axes in the simulation.
 	Beliefs int `default:"2"`
 
+	// PartisanPosition determines whether agents are initialized with a
+	// spatial position corresponding to their beliefs, as in the seating of
+	// an elected legislature.
+	PartisanPosition bool `default:"false"`
+
 	// RandomInfluence is the proportion of initial influence that is randomly
 	// determined as opposed to constant.
 	RandomInfluence float32 `default:"0.5"`
