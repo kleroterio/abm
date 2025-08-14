@@ -31,7 +31,7 @@ const (
 	ModeBelief
 )
 
-// Plot is a customizable 2D plot of a simulation.
+// Plot is a customizable 2D plot of the agents in a simulation.
 type Plot struct {
 	core.Frame
 
