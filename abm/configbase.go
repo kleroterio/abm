@@ -10,6 +10,10 @@ type ConfigBase struct { //types:add
 	// Beliefs is the number of political belief axes in the simulation.
 	Beliefs int `default:"2"`
 
+	// RandomInfluence is the proportion of initial influence that is randomly
+	// determined as opposed to constant.
+	RandomInfluence float32 `default:"0.5"`
+
 	// ChangeVelocity is the chance that an agent will change its spatial velocity.
 	ChangeVelocity float32 `default:"0.1"`
 
