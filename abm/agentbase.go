@@ -99,13 +99,22 @@ func (ab *AgentBase) Interact(other Agent) {
 		ba := &ab.Beliefs[i]
 		bo := &other.Base().Beliefs[i]
 
-		baseline := (*ba + 0.5) / 2
-		delta := cb.InteractionEffect * (*bo - baseline)
-		*ba += delta * (oi / ai)
-
-		// *bo -= delta * (ai / oi)
+		ab.shiftBelief(ba, bo, ai, oi, cb)
+		other.Base().shiftBelief(bo, ba, oi, ai, cb) // reverse interaction
 
 		*ba = math32.Clamp(*ba, 0, 1)
 		*bo = math32.Clamp(*bo, 0, 1)
 	}
+}
+
+// shiftBelief shifts the belief ba towards bo based on the influences ai and oi.
+func (ab *AgentBase) shiftBelief(ba, bo *float32, ai, oi float32, cb *ConfigBase) {
+	// The delta is not just based on bo - ba, because talking with someone who
+	// you agree with will move you more strongly in that direction, so it is more
+	// like bo - 0.5. On the other hand, arguments in the middle aren't entirely
+	// un-motivating, just somewhat less persuasive, so take the average of ba and
+	// 0.5 to determine the baseline to be subtracted from bo.
+	baseline := (*ba + 0.5) / 2
+	delta := cb.InteractionEffect * (*bo - baseline)
+	*ba += delta * (oi / ai)
 }
