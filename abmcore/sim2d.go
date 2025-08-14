@@ -49,6 +49,12 @@ func (sw *Sim2D) Init() {
 	})
 }
 
+// UpdatePlots updates the plots with the latest data from the simulation.
+func (sw *Sim2D) UpdatePlots() {
+	sw.population.UpdatePlot()
+	sw.stats.UpdatePlot(sw.population.table)
+}
+
 func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 	tree.Add(p, func(w *core.Button) {
 		w.SetText("Reset").SetIcon(icons.Update)

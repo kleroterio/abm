@@ -66,6 +66,12 @@ func (st *Stats) ComputeStats(agentTable *table.Table) {
 	st.table.Column("Polarization").SetFloat(stddev, steps-1)
 }
 
+// UpdatePlot updates the table and plot.
+func (st *Stats) UpdatePlot(agentTable *table.Table) {
+	st.ComputeStats(agentTable)
+	st.plot.UpdatePlot()
+}
+
 func (st *Stats) MakeToolbar(p *tree.Plan) {
 	st.plot.MakeToolbar(p)
 }
