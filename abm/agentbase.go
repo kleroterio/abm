@@ -80,7 +80,7 @@ func (ab *AgentBase) StepPosition() {
 	if rand.Float32() < cb.ChangeVelocity {
 		ab.Velocity = math32.Vec2(rand.Float32(), rand.Float32()).SubScalar(0.5).MulScalar(1 - cb.BeliefVelocity)
 		if cb.Beliefs >= 2 {
-			ab.Velocity.SetAdd(math32.Vec2(ab.Beliefs[0], ab.Beliefs[1]).MulScalar(cb.BeliefVelocity))
+			ab.Velocity.SetAdd(math32.Vec2(ab.Beliefs[0], ab.Beliefs[1]).SubScalar(0.5).MulScalar(cb.BeliefVelocity))
 		}
 		ab.Velocity.SetMulScalar(cb.VelocityMultiplier)
 	}
