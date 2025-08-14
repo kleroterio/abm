@@ -56,16 +56,20 @@ func (sb *SimBase) Step() {
 			if dist > ir {
 				continue
 			}
-			beliefDist := float32(0)
-			for i, ba := range a.Base().Beliefs {
-				delta := other.Base().Beliefs[i] - ba
-				beliefDist += delta * delta
+
+			if cb.BeliefFilter > 0 {
+				beliefDist := float32(0)
+				for i, ba := range a.Base().Beliefs {
+					delta := other.Base().Beliefs[i] - ba
+					beliefDist += delta * delta
+				}
+				beliefDist = math32.Sqrt(beliefDist / float32(cb.Beliefs))
+				chanceInteract := (1 - beliefDist) / cb.BeliefFilter
+				if rand.Float32() > chanceInteract {
+					continue
+				}
 			}
-			beliefDist = math32.Sqrt(beliefDist / float32(cb.Beliefs))
-			chanceInteract := (1 - beliefDist) / cb.BeliefFilter
-			if rand.Float32() > chanceInteract {
-				continue
-			}
+
 			a.Base().Interact(other)
 			break
 		}
