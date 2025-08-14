@@ -8,10 +8,10 @@ import (
 	"github.com/kleroterio/abm/abm"
 )
 
-var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Plot", IDName: "plot", Doc: "Plot is a customizable 2D plot of a simulation.", Embeds: []types.Field{{Name: "Frame"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "Mode", Doc: "Mode is the current preset plotting mode."}, {Name: "table", Doc: "table is the data table for plotting."}, {Name: "plot", Doc: "plot is the plot editor widget."}}})
+var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Plot", IDName: "plot", Doc: "Plot is a customizable 2D plot of the agents in a simulation.", Embeds: []types.Field{{Name: "Frame"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "Mode", Doc: "Mode is the current preset plotting mode."}, {Name: "table", Doc: "table is the data table for plotting."}, {Name: "plot", Doc: "plot is the plot editor widget."}}})
 
 // NewPlot returns a new [Plot] with the given optional parent:
-// Plot is a customizable 2D plot of a simulation.
+// Plot is a customizable 2D plot of the agents in a simulation.
 func NewPlot(parent ...tree.Node) *Plot { return tree.New[Plot](parent...) }
 
 // SetSim sets the [Plot.Sim]:
@@ -22,7 +22,7 @@ func (t *Plot) SetSim(v abm.Sim) *Plot { t.Sim = v; return t }
 // Mode is the current preset plotting mode.
 func (t *Plot) SetMode(v Modes) *Plot { t.Mode = v; return t }
 
-var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Sim2D", IDName: "sim2-d", Doc: "Sim2D implements a plot-based 2D representation of an agent-based model simulation.", Embeds: []types.Field{{Name: "Splits"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}}})
+var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Sim2D", IDName: "sim2-d", Doc: "Sim2D implements a plot-based 2D representation of an agent-based model simulation.", Embeds: []types.Field{{Name: "Splits"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "running", Doc: "running is whether the simulation is currently running."}, {Name: "population", Doc: "population is the plot of the agent population."}}})
 
 // NewSim2D returns a new [Sim2D] with the given optional parent:
 // Sim2D implements a plot-based 2D representation of an agent-based model simulation.
@@ -31,3 +31,13 @@ func NewSim2D(parent ...tree.Node) *Sim2D { return tree.New[Sim2D](parent...) }
 // SetSim sets the [Sim2D.Sim]:
 // Sim is the simulation that this 2D representation is based on.
 func (t *Sim2D) SetSim(v abm.Sim) *Sim2D { t.Sim = v; return t }
+
+var _ = types.AddType(&types.Type{Name: "github.com/kleroterio/abm/abmcore.Stats", IDName: "stats", Doc: "Stats is a customizable plot of statistics from a simulation.", Embeds: []types.Field{{Name: "Frame"}}, Fields: []types.Field{{Name: "Sim", Doc: "Sim is the simulation that this 2D representation is based on."}, {Name: "statsTable", Doc: "statsTable is the stats data statsTable for plotting."}, {Name: "agentTable", Doc: "agentTable is the table of agent data, which is used for computing statistics."}, {Name: "plot", Doc: "plot is the plot editor widget."}}})
+
+// NewStats returns a new [Stats] with the given optional parent:
+// Stats is a customizable plot of statistics from a simulation.
+func NewStats(parent ...tree.Node) *Stats { return tree.New[Stats](parent...) }
+
+// SetSim sets the [Stats.Sim]:
+// Sim is the simulation that this 2D representation is based on.
+func (t *Stats) SetSim(v abm.Sim) *Stats { t.Sim = v; return t }
