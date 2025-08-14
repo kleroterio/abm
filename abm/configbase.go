@@ -26,7 +26,7 @@ type ConfigBase struct { //types:add
 	// interaction. For example, a value of 1 means that if agents have a normalized
 	// belief distance of 0.7, the chance of interaction is 30%. A value of 2 would
 	// make that chance 15%. A value of 0 disables belief filtering.
-	BeliefFilter float32 `default:"1"`
+	BeliefFilter float32 `default:"0.5"`
 
 	// InteractionEffect is how much an interaction impacts beliefs as a
 	// proportion of the initial difference in beliefs.
