@@ -64,6 +64,7 @@ func (ab *AgentBase) Init(sim Sim) {
 		ab.Beliefs[i] = rand.Float32()
 	}
 	ab.Values = slices.Clone(ab.Beliefs)
+	// ab.Position.Set(ab.Beliefs[0], ab.Beliefs[1])
 	ab.Influence = rand.Float32()
 }
 
@@ -98,9 +99,11 @@ func (ab *AgentBase) Interact(other Agent) {
 		ba := &ab.Beliefs[i]
 		bo := &other.Base().Beliefs[i]
 
-		delta := cb.InteractionEffect * (*bo - *ba)
+		baseline := (*ba + 0.5) / 2
+		delta := cb.InteractionEffect * (*bo - baseline)
 		*ba += delta * (oi / ai)
-		*bo -= delta * (ai / oi)
+
+		// *bo -= delta * (ai / oi)
 
 		*ba = math32.Clamp(*ba, 0, 1)
 		*bo = math32.Clamp(*bo, 0, 1)
