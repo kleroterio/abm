@@ -78,7 +78,11 @@ var zeroVec, oneVec = math32.Vector2{}, math32.Vec2(1, 1)
 func (ab *AgentBase) StepPosition() {
 	cb := ab.Sim.Base().Config.Base()
 	if rand.Float32() < cb.ChangeVelocity {
-		ab.Velocity = math32.Vec2(rand.Float32(), rand.Float32()).SubScalar(0.5).MulScalar(cb.VelocityMultiplier)
+		ab.Velocity = math32.Vec2(rand.Float32(), rand.Float32()).SubScalar(0.5).MulScalar(1 - cb.BeliefVelocity)
+		if cb.Beliefs >= 2 {
+			ab.Velocity.SetAdd(math32.Vec2(ab.Beliefs[0], ab.Beliefs[1]).MulScalar(cb.BeliefVelocity))
+		}
+		ab.Velocity.SetMulScalar(cb.VelocityMultiplier)
 	}
 	ab.Position.SetAdd(ab.Velocity)
 	ab.Position.Clamp(zeroVec, oneVec)

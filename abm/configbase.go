@@ -12,7 +12,7 @@ type ConfigBase struct { //types:add
 
 	// PartisanPosition determines whether agents are initialized with a
 	// spatial position corresponding to their beliefs, as in the seating of
-	// an elected legislature.
+	// an elected legislature (only applicable for Beliefs >= 2).
 	PartisanPosition bool `default:"false"`
 
 	// RandomInfluence is the proportion of initial influence that is randomly
@@ -22,7 +22,11 @@ type ConfigBase struct { //types:add
 	// ChangeVelocity is the chance that an agent will change its spatial velocity.
 	ChangeVelocity float32 `default:"0.1"`
 
-	// VelocityMultiplier is a multiplier on the random spatial velocity at which
+	// BeliefVelocity is the proportion of an agent's velocity that is determined
+	// by its beliefs as opposed to randomly (only applicable for Beliefs >= 2).
+	BeliefVelocity float32 `default:"0.1"`
+
+	// VelocityMultiplier is an overall multiplier on the velocity at which
 	// agents move.
 	VelocityMultiplier float32 `default:"0.01"`
 
