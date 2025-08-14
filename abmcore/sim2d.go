@@ -46,7 +46,6 @@ func (sw *Sim2D) Init() {
 
 		stats, _ := w.NewTab("Stats")
 		sw.stats = NewStats(stats).SetSim(sw.Sim)
-		sw.stats.agentTable = sw.population.table
 	})
 }
 
