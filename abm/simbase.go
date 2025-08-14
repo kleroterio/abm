@@ -62,7 +62,8 @@ func (sb *SimBase) Step() {
 				beliefDist += delta * delta
 			}
 			beliefDist = math32.Sqrt(beliefDist / float32(cb.Beliefs))
-			if rand.Float32() < beliefDist {
+			chanceInteract := (1 - beliefDist) / cb.BeliefFilter
+			if rand.Float32() > chanceInteract {
 				continue
 			}
 			a.Base().Interact(other)

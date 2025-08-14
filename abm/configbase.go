@@ -22,6 +22,12 @@ type ConfigBase struct { //types:add
 	// (n = total number of agents).
 	InteractionRadius float32 `default:"1"`
 
+	// BeliefFilter is the impact that normalized belief distance has on the chance of
+	// interaction. For example, a value of 1 means that if agents have a normalized
+	// belief distance of 0.7, the chance of interaction is 30%. A value of 2 would
+	// make that chance 15%.
+	BeliefFilter float32 `default:"1"`
+
 	// InteractionEffect is how much an interaction impacts beliefs as a
 	// proportion of the initial difference in beliefs.
 	InteractionEffect float32 `default:"0.01"`
