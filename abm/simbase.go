@@ -23,6 +23,9 @@ type SimBase struct {
 	// Agents are the agents in the simulation.
 	Agents []Agent
 
+	// Steps are the number of time steps that have been executed.
+	Steps int
+
 	// idCounter is used to generate unique IDs for agents.
 	idCounter uint64
 }
@@ -43,6 +46,7 @@ func (sb *SimBase) Init() {
 // It does this by having each agent interact with one or more randomly
 // selected agents as determined by the configuration parameters.
 func (sb *SimBase) Step() {
+	sb.Steps++
 	cb := sb.Config.Base()
 	ir := cb.InteractionRadius / float32(len(sb.Agents))
 	for i, a := range sb.Agents {
