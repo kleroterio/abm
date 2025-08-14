@@ -109,15 +109,12 @@ func (ab *AgentBase) Interact(other Agent) {
 
 // shiftBelief shifts the belief ba towards bo based on the influences ai and oi.
 func (ab *AgentBase) shiftBelief(ba, bo *float32, ai, oi float32, cb *ConfigBase) {
-	baseline := *ba
-	if cb.ExtremeBias {
-		// The delta is not just based on bo - ba, because talking with someone who
-		// you agree with will move you more strongly in that direction, so it is more
-		// like bo - 0.5. On the other hand, arguments in the middle aren't entirely
-		// un-motivating, just somewhat less persuasive, so take the average of ba and
-		// 0.5 to determine the baseline to be subtracted from bo.
-		baseline = (*ba + 0.5) / 2
-	}
+	// The delta is not just based on bo - ba, because talking with someone who
+	// you agree with will move you more strongly in that direction, so it is more
+	// like bo - 0.5. On the other hand, arguments in the middle aren't entirely
+	// un-motivating, just somewhat less persuasive, so the ExtremeBias parameter
+	// determines how much less persuasive they are.
+	baseline := 0.5*cb.ExtremeBias + *ba*(1-cb.ExtremeBias)
 	delta := cb.InteractionEffect * (*bo - baseline)
 	*ba += delta * (oi / ai)
 }

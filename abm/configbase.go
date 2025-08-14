@@ -28,10 +28,10 @@ type ConfigBase struct { //types:add
 	// make that chance 15%. A value of 0 disables belief filtering.
 	BeliefFilter float32 `default:"0.5"`
 
-	// ExtremeBias indicates whether agents are biased towards extreme beliefs
+	// ExtremeBias is the bias that agents have toward extreme beliefs.
 	// (i.e., beliefs closer to 0 or 1 have a greater influence in interactions
 	// than those closer to 0.5).
-	ExtremeBias bool `default:"true"`
+	ExtremeBias float32 `default:"0.1"`
 
 	// InteractionEffect is how much an interaction impacts beliefs as a
 	// proportion of the initial difference in beliefs.
@@ -41,7 +41,7 @@ type ConfigBase struct { //types:add
 	// as a proportion of the difference between beliefs and values.
 	// Values have a kind of restorative force, pulling beliefs back to the original
 	// values over time.
-	ValueEffect float32 `default:"0.005"`
+	ValueEffect float32 `default:"0.01"`
 }
 
 func (cb *ConfigBase) Base() *ConfigBase {
