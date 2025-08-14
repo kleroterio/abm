@@ -57,7 +57,9 @@ func (sw *Sim2D) UpdatePlots(step bool) {
 	if step {
 		sw.stats.ComputeStats(sw.population.table)
 	}
-	sw.stats.plot.UpdatePlot()
+	if sw.stats.plot.IsVisible() {
+		sw.stats.plot.UpdatePlot()
+	}
 }
 
 func (sw *Sim2D) MakeToolbar(p *tree.Plan) {

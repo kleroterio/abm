@@ -131,7 +131,9 @@ func (pl *Plot) UpdateTable() {
 // UpdatePlot updates the table and plot.
 func (pl *Plot) UpdatePlot() {
 	pl.UpdateTable()
-	pl.plot.UpdatePlot()
+	if pl.plot.IsVisible() {
+		pl.plot.UpdatePlot()
+	}
 }
 
 // colorStyler is a plot styler that styles points based on agent beliefs.
