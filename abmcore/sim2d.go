@@ -50,14 +50,14 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 			sw.running = false
 			sw.Sim.Init()
 			sw.population.UpdatePlot()
-			sw.Scene.Restyle()
+			core.AsWidget(w.Parent).Restyle()
 		})
 	})
 	tree.Add(p, func(w *core.Button) {
 		w.SetText("Run").SetIcon(icons.PlayArrow)
 		w.OnClick(func(e events.Event) {
 			sw.running = true
-			sw.Scene.Restyle()
+			core.AsWidget(w.Parent).Restyle()
 			sw.Animate(func(a *core.Animation) {
 				if !sw.running {
 					a.Done = true
