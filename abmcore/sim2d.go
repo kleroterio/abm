@@ -25,6 +25,9 @@ type Sim2D struct {
 
 	// population is the plot of the agent population.
 	population *Plot
+
+	// stats is the plot of the simulation statistics.
+	stats *Stats
 }
 
 func (sw *Sim2D) Init() {
@@ -38,8 +41,12 @@ func (sw *Sim2D) Init() {
 		w.SetStruct(sw.Sim.Base().Config)
 	})
 	tree.AddChild(sw, func(w *core.Tabs) {
-		fr, _ := w.NewTab("Population 2D")
-		sw.population = NewPlot(fr).SetSim(sw.Sim)
+		pop, _ := w.NewTab("Agents")
+		sw.population = NewPlot(pop).SetSim(sw.Sim)
+
+		stats, _ := w.NewTab("Stats")
+		sw.stats = NewStats(stats).SetSim(sw.Sim)
+		sw.stats.agentTable = sw.population.table
 	})
 }
 
