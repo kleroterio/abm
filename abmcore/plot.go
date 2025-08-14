@@ -62,9 +62,6 @@ func (pl *Plot) Init() {
 		pl.plot = w
 
 		w.Updater(func() {
-			if pl.table == nil {
-				pl.MakeTable()
-			}
 			pl.UpdateTable()
 		})
 	})
@@ -113,6 +110,10 @@ func (pl *Plot) MakeTable() {
 
 // UpdateTable updates the data table with the current agent data.
 func (pl *Plot) UpdateTable() {
+	if pl.table == nil {
+		pl.MakeTable()
+	}
+
 	agents := pl.Sim.Base().Agents
 	pl.table.SetNumRows(len(agents))
 
