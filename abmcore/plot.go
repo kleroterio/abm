@@ -61,14 +61,12 @@ func (pl *Plot) Init() {
 	tree.AddChild(pl, func(w *plotcore.Editor) {
 		pl.plot = w
 
-		w.Updater(func() {
-			pl.UpdateTable()
-		})
+		w.Updater(pl.UpdateTable)
 	})
 }
 
-// MakeTable creates the data table for plotting.
-func (pl *Plot) MakeTable() {
+// makeTable creates the data table for plotting.
+func (pl *Plot) makeTable() {
 	pl.table = table.New()
 	n := len(pl.Sim.Base().Agents)
 	pl.table.AddColumn("Spatial X", tensor.NewFloat32(n))
@@ -111,7 +109,7 @@ func (pl *Plot) MakeTable() {
 // UpdateTable updates the data table with the current agent data.
 func (pl *Plot) UpdateTable() {
 	if pl.table == nil {
-		pl.MakeTable()
+		pl.makeTable()
 	}
 
 	agents := pl.Sim.Base().Agents
@@ -128,6 +126,12 @@ func (pl *Plot) UpdateTable() {
 
 		pl.table.Column("Influence").SetFloat(float64(a.Base().Influence), i)
 	}
+}
+
+// UpdatePlot updates the table and plot.
+func (pl *Plot) UpdatePlot() {
+	pl.UpdateTable()
+	pl.plot.UpdatePlot()
 }
 
 // colorStyler is a plot styler that styles points based on agent beliefs.
