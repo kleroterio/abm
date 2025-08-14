@@ -22,6 +22,9 @@ type Sim2D struct {
 
 	// running is whether the simulation is currently running.
 	running bool
+
+	// population is the plot of the agent population.
+	population *Plot
 }
 
 func (sw *Sim2D) Init() {
@@ -36,7 +39,7 @@ func (sw *Sim2D) Init() {
 	})
 	tree.AddChild(sw, func(w *core.Tabs) {
 		fr, _ := w.NewTab("Population 2D")
-		NewPlot(fr).SetSim(sw.Sim)
+		sw.population = NewPlot(fr).SetSim(sw.Sim)
 	})
 }
 
@@ -46,7 +49,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.OnClick(func(e events.Event) {
 			sw.running = false
 			sw.Sim.Init()
-			sw.Update()
+			sw.population.UpdatePlot()
 			sw.Scene.Restyle()
 		})
 	})
@@ -61,7 +64,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 					return
 				}
 				sw.Sim.Step()
-				sw.Update()
+				sw.population.UpdatePlot()
 			})
 		})
 	})
@@ -79,7 +82,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.SetText("Step").SetIcon(icons.Step)
 		w.OnClick(func(e events.Event) {
 			sw.Sim.Step()
-			sw.Update()
+			sw.population.UpdatePlot()
 		})
 	})
 }
