@@ -61,7 +61,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.OnClick(func(e events.Event) {
 			sw.running = false
 			sw.Sim.Init()
-			sw.population.UpdatePlot()
+			sw.UpdatePlots()
 			core.AsWidget(w.Parent).Restyle()
 		})
 	})
@@ -76,7 +76,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 					return
 				}
 				sw.Sim.Step()
-				sw.population.UpdatePlot()
+				sw.UpdatePlots()
 			})
 		})
 	})
@@ -94,7 +94,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.SetText("Step").SetIcon(icons.Step)
 		w.OnClick(func(e events.Event) {
 			sw.Sim.Step()
-			sw.population.UpdatePlot()
+			sw.UpdatePlots()
 		})
 	})
 }
