@@ -3,8 +3,8 @@ module github.com/kleroterio/abm
 go 1.23.4
 
 require (
-	cogentcore.org/core v0.3.12
-	cogentcore.org/lab v0.1.2
+	cogentcore.org/core v0.3.13-0.20250807231547-ae1e4f43215b
+	cogentcore.org/lab v0.1.3-0.20250814010132-4a4e3f0e9e30
 )
 
 require (
@@ -32,9 +32,9 @@ require (
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
 	golang.org/x/image v0.25.0 // indirect
 	golang.org/x/mod v0.25.0 // indirect
-	golang.org/x/net v0.41.0 // indirect
-	golang.org/x/sync v0.15.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.26.0 // indirect
-	golang.org/x/tools v0.33.0 // indirect
+	golang.org/x/net v0.42.0 // indirect
+	golang.org/x/sync v0.16.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
+	golang.org/x/text v0.27.0 // indirect
+	golang.org/x/tools v0.34.0 // indirect
 )
