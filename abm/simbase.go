@@ -37,6 +37,8 @@ func (sb *SimBase) Base() *SimBase {
 // Init initializes the simulation by initializing all agents
 // and connecting them according to their positions and beliefs.
 func (sb *SimBase) Init() {
+	sb.Steps = 0
+
 	for _, a := range sb.Agents {
 		a.Init(sb.This)
 	}

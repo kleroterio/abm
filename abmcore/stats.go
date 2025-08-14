@@ -49,6 +49,8 @@ func (st *Stats) Init() {
 func (st *Stats) makeTable() {
 	st.table = table.New()
 	st.table.AddColumn("Polarization", tensor.NewFloat32(1))
+
+	st.plot.SetTable(st.table)
 }
 
 // ComputeStats computes the statistics from the given agent data.
@@ -58,18 +60,13 @@ func (st *Stats) ComputeStats(agentTable *table.Table) {
 	}
 
 	steps := st.Sim.Base().Steps
+
 	st.table.SetNumRows(steps)
 
 	varX := stats.VarPop(agentTable.Column("Belief X")).Float(0)
 	varY := stats.VarPop(agentTable.Column("Belief Y")).Float(0)
 	stddev := math.Sqrt(varX + varY)
 	st.table.Column("Polarization").SetFloat(stddev, steps-1)
-}
-
-// UpdatePlot updates the table and plot.
-func (st *Stats) UpdatePlot(agentTable *table.Table) {
-	st.ComputeStats(agentTable)
-	st.plot.UpdatePlot()
 }
 
 func (st *Stats) MakeToolbar(p *tree.Plan) {

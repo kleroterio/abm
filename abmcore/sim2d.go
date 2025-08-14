@@ -50,9 +50,14 @@ func (sw *Sim2D) Init() {
 }
 
 // UpdatePlots updates the plots with the latest data from the simulation.
-func (sw *Sim2D) UpdatePlots() {
+// If step is true, it indicates that this update is after a simulation step,
+// which leads to the computation of statistics.
+func (sw *Sim2D) UpdatePlots(step bool) {
 	sw.population.UpdatePlot()
-	sw.stats.UpdatePlot(sw.population.table)
+	if step {
+		sw.stats.ComputeStats(sw.population.table)
+	}
+	sw.stats.plot.UpdatePlot()
 }
 
 func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
@@ -61,7 +66,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.OnClick(func(e events.Event) {
 			sw.running = false
 			sw.Sim.Init()
-			sw.UpdatePlots()
+			sw.UpdatePlots(false)
 			core.AsWidget(w.Parent).Restyle()
 		})
 	})
@@ -76,7 +81,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 					return
 				}
 				sw.Sim.Step()
-				sw.UpdatePlots()
+				sw.UpdatePlots(true)
 			})
 		})
 	})
@@ -94,7 +99,7 @@ func (sw *Sim2D) MakeToolbar(p *tree.Plan) {
 		w.SetText("Step").SetIcon(icons.Step)
 		w.OnClick(func(e events.Event) {
 			sw.Sim.Step()
-			sw.UpdatePlots()
+			sw.UpdatePlots(true)
 		})
 	})
 }
