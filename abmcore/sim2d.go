@@ -42,7 +42,7 @@ func (sw *Sim2D) Init() {
 	})
 	tree.AddChild(sw, func(w *core.Tabs) {
 		pop, _ := w.NewTab("Agents")
-		sw.population = NewPlot(pop).SetSim(sw.Sim)
+		sw.population = NewAgents(pop).SetSim(sw.Sim)
 
 		stats, _ := w.NewTab("Stats")
 		sw.stats = NewStats(stats).SetSim(sw.Sim)
