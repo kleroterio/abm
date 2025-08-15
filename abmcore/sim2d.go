@@ -24,7 +24,7 @@ type Sim2D struct {
 	running bool
 
 	// population is the plot of the agent population.
-	population *Plot
+	population *Agents
 
 	// stats is the plot of the simulation statistics.
 	stats *Stats

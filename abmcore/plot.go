@@ -19,7 +19,7 @@ import (
 	"github.com/kleroterio/abm/abm"
 )
 
-// Modes are different preset modes for a [Plot] plot.
+// Modes are different preset modes for a [Agents] plot.
 type Modes int32 //enums:enum -trim-prefix Mode
 
 const (
@@ -31,8 +31,8 @@ const (
 	ModeBelief
 )
 
-// Plot is a customizable 2D plot of the agents in a simulation.
-type Plot struct {
+// Agents is a customizable 2D plot of the agents in a simulation.
+type Agents struct {
 	core.Frame
 
 	// Sim is the simulation that this 2D representation is based on.
@@ -48,96 +48,96 @@ type Plot struct {
 	plot *plotcore.Editor
 }
 
-func (pl *Plot) Init() {
-	pl.Frame.Init()
-	pl.Styler(func(s *styles.Style) {
+func (ag *Agents) Init() {
+	ag.Frame.Init()
+	ag.Styler(func(s *styles.Style) {
 		s.Grow.Set(1, 1)
 		s.Direction = styles.Column
 	})
 
-	tree.AddChild(pl, func(w *core.Toolbar) {
-		w.Maker(pl.MakeToolbar)
+	tree.AddChild(ag, func(w *core.Toolbar) {
+		w.Maker(ag.MakeToolbar)
 	})
-	tree.AddChild(pl, func(w *plotcore.Editor) {
-		pl.plot = w
+	tree.AddChild(ag, func(w *plotcore.Editor) {
+		ag.plot = w
 
-		w.Updater(pl.UpdateTable)
+		w.Updater(ag.UpdateTable)
 	})
 }
 
 // makeTable creates the data table for plotting.
-func (pl *Plot) makeTable() {
-	pl.table = table.New()
-	n := len(pl.Sim.Base().Agents)
-	pl.table.AddColumn("Spatial X", tensor.NewFloat32(n))
-	pl.table.AddColumn("Spatial Y", tensor.NewFloat32(n))
-	pl.table.AddColumn("Belief X", tensor.NewFloat32(n))
-	pl.table.AddColumn("Belief Y", tensor.NewFloat32(n))
-	pl.table.AddColumn("Influence", tensor.NewFloat32(n))
+func (ag *Agents) makeTable() {
+	ag.table = table.New()
+	n := len(ag.Sim.Base().Agents)
+	ag.table.AddColumn("Spatial X", tensor.NewFloat32(n))
+	ag.table.AddColumn("Spatial Y", tensor.NewFloat32(n))
+	ag.table.AddColumn("Belief X", tensor.NewFloat32(n))
+	ag.table.AddColumn("Belief Y", tensor.NewFloat32(n))
+	ag.table.AddColumn("Influence", tensor.NewFloat32(n))
 
-	plot.Styler(pl.table.Column("Spatial Y"), pl.colorStyler)
-	plot.Styler(pl.table.Column("Belief Y"), pl.colorStyler)
+	plot.Styler(ag.table.Column("Spatial Y"), ag.colorStyler)
+	plot.Styler(ag.table.Column("Belief Y"), ag.colorStyler)
 
-	plot.Styler(pl.table.Column("Influence"), func(s *plot.Style) {
+	plot.Styler(ag.table.Column("Influence"), func(s *plot.Style) {
 		s.Role = plot.Size
 	})
 
-	plot.Styler(pl.table.Column("Spatial X"), func(s *plot.Style) {
-		if pl.Mode == ModeSpatial {
+	plot.Styler(ag.table.Column("Spatial X"), func(s *plot.Style) {
+		if ag.Mode == ModeSpatial {
 			s.Role = plot.X
 		} else {
 			s.Role = plot.Y
 		}
 	})
-	plot.Styler(pl.table.Column("Spatial Y"), func(s *plot.Style) {
-		s.On = pl.Mode == ModeSpatial
+	plot.Styler(ag.table.Column("Spatial Y"), func(s *plot.Style) {
+		s.On = ag.Mode == ModeSpatial
 	})
-	plot.Styler(pl.table.Column("Belief X"), func(s *plot.Style) {
-		if pl.Mode == ModeBelief {
+	plot.Styler(ag.table.Column("Belief X"), func(s *plot.Style) {
+		if ag.Mode == ModeBelief {
 			s.Role = plot.X
 		} else {
 			s.Role = plot.Y
 		}
 	})
-	plot.Styler(pl.table.Column("Belief Y"), func(s *plot.Style) {
-		s.On = pl.Mode == ModeBelief
+	plot.Styler(ag.table.Column("Belief Y"), func(s *plot.Style) {
+		s.On = ag.Mode == ModeBelief
 	})
 
-	pl.plot.SetTable(pl.table)
+	ag.plot.SetTable(ag.table)
 }
 
 // UpdateTable updates the data table with the current agent data.
-func (pl *Plot) UpdateTable() {
-	if pl.table == nil {
-		pl.makeTable()
+func (ag *Agents) UpdateTable() {
+	if ag.table == nil {
+		ag.makeTable()
 	}
 
-	agents := pl.Sim.Base().Agents
-	pl.table.SetNumRows(len(agents))
+	agents := ag.Sim.Base().Agents
+	ag.table.SetNumRows(len(agents))
 
 	for i, a := range agents {
 		pos := a.Base().Position
-		pl.table.Column("Spatial X").SetFloat(float64(pos.X), i)
-		pl.table.Column("Spatial Y").SetFloat(float64(pos.Y), i)
+		ag.table.Column("Spatial X").SetFloat(float64(pos.X), i)
+		ag.table.Column("Spatial Y").SetFloat(float64(pos.Y), i)
 
 		beliefs := a.Base().Beliefs
-		pl.table.Column("Belief X").SetFloat(float64(beliefs[0]), i)
-		pl.table.Column("Belief Y").SetFloat(float64(beliefs[1]), i)
+		ag.table.Column("Belief X").SetFloat(float64(beliefs[0]), i)
+		ag.table.Column("Belief Y").SetFloat(float64(beliefs[1]), i)
 
-		pl.table.Column("Influence").SetFloat(float64(a.Base().Influence), i)
+		ag.table.Column("Influence").SetFloat(float64(a.Base().Influence), i)
 	}
 }
 
 // UpdatePlot updates the table and plot.
-func (pl *Plot) UpdatePlot() {
-	pl.UpdateTable()
-	if pl.plot.IsVisible() {
-		pl.plot.UpdatePlot()
+func (ag *Agents) UpdatePlot() {
+	ag.UpdateTable()
+	if ag.plot.IsVisible() {
+		ag.plot.UpdatePlot()
 	}
 }
 
 // colorStyler is a plot styler that styles points based on agent beliefs.
-func (pl *Plot) colorStyler(s *plot.Style) {
+func (ag *Agents) colorStyler(s *plot.Style) {
 	s.Line.On = plot.Off
 	s.Point.On = plot.On
 	// need a little extra room to avoid plot shifting
@@ -145,7 +145,7 @@ func (pl *Plot) colorStyler(s *plot.Style) {
 	s.Plot.XAxis.Range.SetMin(-0.02).SetMax(1.02)
 	s.Point.Size.Pt(5)
 
-	agents := pl.Sim.Base().Agents
+	agents := ag.Sim.Base().Agents
 	s.Point.ColorFunc = func(i int) image.Image {
 		beliefs := agents[i].Base().Beliefs
 
@@ -164,10 +164,10 @@ func (pl *Plot) colorStyler(s *plot.Style) {
 	s.Point.FillFunc = s.Point.ColorFunc
 }
 
-func (pl *Plot) MakeToolbar(p *tree.Plan) {
+func (ag *Agents) MakeToolbar(p *tree.Plan) {
 	tree.Add(p, func(w *core.Switches) {
-		core.Bind(&pl.Mode, w)
+		core.Bind(&ag.Mode, w)
 	})
 
-	pl.plot.MakeToolbar(p)
+	ag.plot.MakeToolbar(p)
 }
