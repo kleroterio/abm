@@ -25,7 +25,7 @@ type ConfigBase struct { //types:add
 	// BeliefVelocity is the proportion of an agent's velocity that is determined
 	// by the difference between its beliefs and current position. The rest is
 	// determined randomly (this is only applicable for Beliefs >= 2).
-	BeliefVelocity float32 `default:"0.5"`
+	BeliefVelocity float32 `default:"0.25"`
 
 	// VelocityMultiplier is an overall multiplier on the velocity at which
 	// agents move.

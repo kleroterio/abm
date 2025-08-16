@@ -107,8 +107,8 @@ func (ab *AgentBase) Interact(other Agent) {
 		ba := &ab.Beliefs[i]
 		bo := &other.Base().Beliefs[i]
 
-		ab.shiftBelief(ba, bo, ai, oi, cb)
-		// other.Base().shiftBelief(bo, ba, oi, ai, cb) // reverse interaction
+		// ab.shiftBelief(ba, bo, ai, oi, cb)
+		other.Base().shiftBelief(bo, ba, oi, ai, cb) // reverse interaction
 
 		*ba = math32.Clamp(*ba, 0, 1)
 		*bo = math32.Clamp(*bo, 0, 1)
