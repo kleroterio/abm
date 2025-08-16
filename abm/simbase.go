@@ -77,7 +77,6 @@ func (sb *SimBase) Step() {
 			}
 
 			a.Base().Interact(other)
-			break
 		}
 	}
 }
